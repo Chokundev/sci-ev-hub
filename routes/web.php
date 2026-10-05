@@ -50,6 +50,9 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
         'update' => 'admin.products.update',
         'destroy' => 'admin.products.destroy',
     ]);
+    // ระบบจัดการคำสั่งซื้อ (Orders)
+    Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('admin.orders.index');
+    Route::put('/orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 
 });
 

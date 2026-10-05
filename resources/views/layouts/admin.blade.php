@@ -28,7 +28,7 @@
                 <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
                     <span class="mr-3">🚘</span> จัดการสินค้า
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
+                <a href="{{ route('admin.orders.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
                     <span class="mr-3">🛒</span> จัดการรายการสั่งซื้อ
                 </a>
                 
