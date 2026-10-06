@@ -22,7 +22,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl bg-gray-800 text-white font-medium shadow-sm transition">
                     <span class="mr-3">📊</span> แดชบอร์ดภาพรวม
                 </a>
-                <a href="#" class="flex items-center px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
+                <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
                     <span class="mr-3">👥</span> จัดการผู้ใช้
                 </a>
                 <a href="{{ route('admin.products.index') }}" class="flex items-center px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-gray-800 transition">
