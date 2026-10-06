@@ -5,14 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\TestDrive;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
     public function userDashboard()
     {
+        // ดึงรายการสั่งจองรถของ User คนนี้
         $orders = Order::where('user_id', Auth::id())->with('product')->latest()->get();
-        return view('dashboard', compact('orders'));
+        
+        // ดึงรายการคิวทดลองขับของ User คนนี้
+        $testDrives = TestDrive::where('user_id', Auth::id())->with('product')->latest()->get();
+
+        // ส่งตัวแปรทั้งสองไปที่หน้า View
+        return view('dashboard', compact('orders', 'testDrives'));
     }
 
     public function checkout(Product $product)
