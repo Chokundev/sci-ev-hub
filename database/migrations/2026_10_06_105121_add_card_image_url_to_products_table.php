@@ -9,22 +9,26 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            // เพิ่มคอลัมน์ card_image_url เข้าไปหลัง image_url
-            $table->text('card_image_url')->nullable()->after('image_url');
-        });
+        // เช็คก่อนว่าในตาราง 'products' มีคอลัมน์ 'card_image_url' หรือยัง
+        if (!Schema::hasColumn('products', 'card_image_url')) {
+            Schema::table('products', function (Blueprint $table) {
+                // ถ้ายังไม่มี ถึงจะทำการสร้างคอลัมน์ใหม่
+                $table->string('card_image_url')->nullable();
+            });
+        }
     }
 
     /**
      * Reverse the migrations.
      */
-   public function down()
+    public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            // ลบคอลัมน์ออกหากมีการย้อนกลับ
-            $table->dropColumn('card_image_url');
-        });
+        if (Schema::hasColumn('products', 'card_image_url')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->dropColumn('card_image_url');
+            });
+        }
     }
 };

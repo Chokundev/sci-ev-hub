@@ -206,9 +206,9 @@
                     สั่งจองทันที
                 </a>
                 <!-- ปุ่มทดลองขับ เรียกใช้ฟังก์ชันแจ้งเตือนชั่วคราว -->
-                <button onclick="showComingSoon(event)" class="bg-white border-2 border-gray-200 text-gray-900 px-10 py-3.5 rounded-full font-semibold hover:border-gray-900 transition-all">
+                <a href="{{ route('test-drive.index', $product->id) }}" class="bg-white border-2 border-gray-200 text-gray-900 px-10 py-3.5 rounded-full font-semibold hover:border-gray-900 transition-all text-center">
                     ทดลองขับ
-                </button>
+                </a>
             </div>
         </div>
     </section>
