@@ -1,0 +1,23 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+{
+    Schema::table('products', function (Blueprint $table) {
+        // เพิ่มคอลัมน์สำหรับเก็บรูปการ์ดหน้าแรก แยกกับรูปดีเทลหลัก (image_url)
+        $table->text('card_image_url')->nullable()->after('image_url');
+    });
+}
+
+public function down()
+{
+    Schema::table('products', function (Blueprint $table) {
+        $table->dropColumn('card_image_url');
+    });
+}
+};

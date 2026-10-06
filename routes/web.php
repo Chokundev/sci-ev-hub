@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 // หน้าหลักของเว็บไซต์ (Landing Page)
 // ==========================================
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/product/{id}', [HomeController::class, 'show'])->name('product.detail');
 
 
 

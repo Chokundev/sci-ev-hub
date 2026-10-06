@@ -8,8 +8,8 @@ class Product extends Model
 {
     // กำหนดฟิลด์ที่อนุญาตให้บันทึกข้อมูลได้ (Mass Assignment)
     protected $fillable = [
-        'name', 'price', 'status_badge', 'accel_0_100', 
-        'max_range', 'top_speed', 'embed_code', 'description'
+        'name', 'price', 'status_badge', 'accel_0_100',
+        'max_range', 'top_speed', 'embed_code', 'description', 'image_url', 'energy_type', 'short_description', 'card_image_url'
     ];
 
     // ความสัมพันธ์: รถ 1 รุ่น สามารถถูกสั่งซื้อได้หลายครั้ง (One-to-Many)

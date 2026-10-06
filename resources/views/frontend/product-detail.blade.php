@@ -1,147 +1,301 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tesla Model 3 - SCI EV Hub</title>
-    <!-- SEO & Meta Tags ที่แยกไฟล์ไว้ สามารถ include เข้ามาได้ เช่น @include('partials.meta') -->
+    <title>{{ $product->name }} - SCI EV Hub</title>
+    @include('partials.meta')
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased overflow-x-hidden">
+<body class="bg-white text-gray-900 font-sans antialiased overflow-x-hidden">
 
-    <!-- Navbar (จำลอง) -->
-    <nav class="fixed w-full z-50 glass-panel shadow-sm transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-tighter text-primary">SCI EV Hub</h1>
-            <div class="space-x-4">
-                <a href="#" class="text-gray-600 hover:text-primary">เข้าสู่ระบบ</a>
-                <a href="#" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-gray-800 transition">สร้างบัญชี</a>
+    <nav class="fixed top-0 w-full z-40 bg-transparent">
+        <!-- ใช้ grid grid-cols-3 เพื่อแบ่งพื้นที่ ซ้าย-กลาง-ขวา ให้เท่ากันเป๊ะ -->
+        <div class="max-w-[1440px] mx-auto px-6 py-6 grid grid-cols-3 items-center">
+            
+            <!-- ฝั่งซ้าย: ปุ่ม Menu -->
+            <div class="flex justify-start">
+                <button onclick="openMenu()" class="flex items-center gap-2 text-back hover:text-gray-500 transition-colors group">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <!-- ข้อความ Menu จะซ่อนในมือถือ และโชว์ในจอใหญ่ขึ้นไป -->
+                    <span class="text-sm font-medium tracking-wide hidden sm:block">Menu</span>
+                </button>
             </div>
+
+            <div class="flex justify-center text-center">
+                <!-- ลบแท็ก <a> โลโก้ออกไปแล้ว -->
+            </div>
+            
+            <!-- ฝั่งขวา: ไอคอน Account -->
+            <div class="flex justify-end">
+                <a href="{{ Auth::check() ? route('dashboard') : route('login') }}" class="text-back hover:text-gray-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </a>
+            </div>
+            
         </div>
     </nav>
 
-    <!-- Header & 3D Model Section -->
-    <section class="pt-32 pb-16 px-4 max-w-7xl mx-auto">
-        <div class="flex flex-col lg:flex-row gap-12 items-center">
-            
-            <!-- ข้อมูลหลักของสินค้า -->
-            <div class="w-full lg:w-1/3 space-y-6" data-aos="fade-right">
-                <span class="inline-block px-4 py-1 rounded-full bg-green-100 text-green-700 font-semibold text-sm">
-                    พร้อมส่งมอบ
-                </span>
-                <h1 class="text-5xl font-bold tracking-tight">Tesla Model 3</h1>
-                <p class="text-3xl text-gray-500">฿ 1,599,000</p>
+    <!-- พื้นหลังสีดำตอนเปิดเมนู (Backdrop) -->
+    <div id="menuBackdrop" onclick="closeMenu()" class="fixed inset-0 bg-black/80 z-[90] opacity-0 pointer-events-none transition-opacity duration-300">
+        <!-- ปุ่มปิด (X) ตรงพื้นที่สีดำมุมขวาบน -->
+        <button onclick="closeMenu()" class="absolute top-8 right-8 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
 
-                <!-- ปุ่มดำเนินการ -->
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <button class="bg-primary text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl hover:bg-gray-800 transition-all w-full sm:w-auto text-center" onclick="buyNow()">
-                        ซื้อทันที
-                    </button>
-                    <button class="border-2 border-primary text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all w-full sm:w-auto text-center">
-                        ทดลองขับ
-                    </button>
-                </div>
-            </div>
-
-            <!-- 3D Model Embed (โชว์จาก Database) -->
-            <div class="w-full lg:w-2/3 glass-panel rounded-3xl p-4 shadow-xl" data-aos="fade-left">
-                <!-- ส่วนนี้จำลองการดึงโค้ดฝังมาจาก {!! $product->embed_code !!} -->
-                <div class="aspect-w-16 aspect-h-9 w-full rounded-2xl overflow-hidden h-[400px] md:h-[500px]">
-                    <div class="sketchfab-embed-wrapper h-full w-full">
-                        <iframe title="Tesla Model 3" class="w-full h-full" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/facc3ebd1e904161b6fb60c10b5747c7/embed"> </iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- สเปคเด่นแบบการ์ด (Grid) -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center" data-aos="fade-up">
-                <div class="glass-panel p-8 rounded-3xl shadow-sm hover:shadow-md transition">
-                    <h3 class="text-4xl font-bold text-primary mb-2">4.4 วินาที</h3>
-                    <p class="text-gray-500">อัตราเร่ง 0-100 กม./ชม.</p>
-                </div>
-                <div class="glass-panel p-8 rounded-3xl shadow-sm hover:shadow-md transition">
-                    <h3 class="text-4xl font-bold text-primary mb-2">629 กม.</h3>
-                    <p class="text-gray-500">ระยะทางสูงสุดต่อการชาร์จ (WLTP)</p>
-                </div>
-                <div class="glass-panel p-8 rounded-3xl shadow-sm hover:shadow-md transition">
-                    <h3 class="text-4xl font-bold text-primary mb-2">201 กม./ชม.</h3>
-                    <p class="text-gray-500">ความเร็วสูงสุด</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- แถบข้อมูลไฮไลต์เพิ่มเติม (Zig-zag Layout) -->
-    <section class="py-24 space-y-24 max-w-7xl mx-auto px-4 overflow-hidden">
+    <!-- แผงเมนูหลัก (สไลด์จากซ้ายไปขวา) -->
+    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 z-[100] w-full md:w-[85%] lg:w-[75%] max-w-[1000px] bg-white flex flex-col md:flex-row transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-2xl">
         
-        <!-- ระบบ Autopilot (รูปขวา ข้อความซ้าย) -->
-        <div class="flex flex-col lg:flex-row items-center gap-16">
-            <div class="w-full lg:w-1/2" data-aos="fade-right">
-                <h2 class="text-3xl font-bold mb-4">ระบบ Autopilot อันชาญฉลาด</h2>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    ให้ทุกการเดินทางของคุณปลอดภัยและผ่อนคลายยิ่งขึ้นด้วยระบบประมวลผลวิชั่นที่ล้ำสมัย ตรวจจับสภาพแวดล้อมรอบคัน 360 องศา ช่วยควบคุมพวงมาลัย อัตราเร่ง และเบรกอัตโนมัติ
-                </p>
+        <!-- ฝั่งซ้าย: ลิงก์เมนู (พื้นหลังสีขาว) -->
+        <div class="w-full md:w-[40%] bg-white h-full overflow-y-auto py-8 md:py-12 px-8 flex flex-col border-r border-gray-100">
+            <div class="flex flex-col space-y-1">
+                <a href="/" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors">
+                    หน้าแรก
+                </a>
+                <a href="#" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors">
+                    เทคโนโลยี EV
+                </a>
+                <a href="#" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors">
+                    จองคิวทดลองขับ
+                </a>
+                <a href="#" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors">
+                    สั่งจองรถยนต์
+                </a>
+                <a href="#" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors">
+                    ติดต่อเรา
+                </a>
             </div>
-            <div class="w-full lg:w-1/2" data-aos="fade-left">
-                <div class="bg-gray-200 h-64 md:h-96 rounded-3xl w-full object-cover">
-                    <!-- ใส่รูปภาพ หรือวิดีโอตรงนี้ -->
+
+            <!-- โซนบัญชีผู้ใช้ (ด้านล่างสุด) -->
+            <div class="mt-auto pt-10">
+                <div class="flex items-center gap-2 mb-4 text-gray-900 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                    Account
+                </div>
+                <div class="flex flex-col space-y-4 pl-7 text-[15px]">
+                    @auth
+                        @if(Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin')
+                            <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-black transition-colors">แผงควบคุม (Admin)</a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-black transition-colors">แผงควบคุมลูกค้า</a>
+                            <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black transition-colors">ตั้งค่าโปรไฟล์</a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="text-red-500 hover:text-red-700 transition-colors">ออกจากระบบ</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="text-gray-600 hover:text-black transition-colors">เข้าสู่ระบบ</a>
+                        <a href="{{ route('register') }}" class="text-gray-600 hover:text-black transition-colors">สร้างบัญชี</a>
+                    @endauth
                 </div>
             </div>
         </div>
 
-        <!-- ความปลอดภัย (รูปซ้าย ข้อความขวา) -->
-        <div class="flex flex-col lg:flex-row-reverse items-center gap-16">
-            <div class="w-full lg:w-1/2" data-aos="fade-left">
-                <h2 class="text-3xl font-bold mb-4">มาตรฐานความปลอดภัยระดับโลก (Safety)</h2>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    โครงสร้างแข็งแกร่งพิเศษ ออกแบบมาเพื่อปกป้องผู้โดยสารในทุกสถานการณ์ จุดศูนย์ถ่วงต่ำช่วยลดความเสี่ยงในการพลิกคว่ำ พร้อมถุงลมนิรภัยรอบคัน
-                </p>
-            </div>
-            <div class="w-full lg:w-1/2" data-aos="fade-right">
-                <div class="bg-gray-200 h-64 md:h-96 rounded-3xl w-full object-cover">
-                    <!-- ใส่รูปภาพ หรือวิดีโอตรงนี้ -->
-                </div>
+        <!-- ฝั่งขวา: รายการรถยนต์เรียงแนวตั้ง (พื้นหลังสีเทาอ่อน) -->
+        <!-- ซ่อนในจอมือถือ (hidden) และแสดงในจอใหญ่ (md:flex) -->
+        <div class="hidden md:flex w-[60%] bg-[#f9f9f9] h-full overflow-y-auto py-12 px-12 flex-col items-center">
+            <div class="w-full max-w-sm flex flex-col gap-16 pb-20">
+                
+                @if(isset($products))
+                    @foreach($products as $item)
+                        @php
+                            $menuImg = $item->image_url;
+                            if ($menuImg && !str_starts_with($menuImg, 'http')) {
+                                $menuImg = asset('storage/' . $menuImg);
+                            }
+                        @endphp
+                        <!-- การ์ดรถแต่ละคัน -->
+                        <a href="{{ route('product.detail', $item->id) }}" class="flex flex-col items-center group text-center block">
+                            <h3 class="text-[19px] font-medium text-black mb-6">{{ $item->name }}</h3>
+                            <img src="{{ $menuImg }}" alt="{{ $item->name }}" class="w-full h-auto object-contain mb-5 drop-shadow-sm transition-transform duration-500 group-hover:scale-[1.03]">
+                            <span class="px-3 py-1 bg-white border border-gray-200 text-[11px] text-gray-500 font-medium tracking-wider">
+                                {{ $item->energy_type ?? 'Electric' }}
+                            </span>
+                        </a>
+                    @endforeach
+                @endif
+                
             </div>
         </div>
+    </div>
 
+    <!-- Main Product Hero -->
+    <section class="relative pt-24 pb-16 px-4 w-full min-h-[85vh] flex flex-col items-center justify-center overflow-hidden">
+        
+        <!-- ปุ่มกลับหน้าหลัก -->
+        <div class="absolute top-28 left-4 md:left-12 z-20" data-aos="fade-right">
+            <a href="/" class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-900 transition-colors font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                กลับ
+            </a>
+        </div>
+
+        <!-- ตัวหนังสือลายน้ำพื้นหลังขนาดใหญ่ -->
+        @php
+            // ดึงคำแรกของชื่อรุ่นมาทำเป็นลายน้ำพื้นหลัง เช่น "Tesla Model 3" ได้คำว่า "Tesla"
+            $watermarkText = explode(' ', trim($product->name))[0];
+        @endphp
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <h1 class="text-[12rem] md:text-[20rem] font-black text-gray-50 whitespace-nowrap tracking-tighter select-none">
+                {{ strtoupper($watermarkText) }}
+            </h1>
+        </div>
+
+        <!-- รูปภาพรถยนต์หลัก และ ปุ่ม 360 -->
+        <div class="relative z-10 w-full max-w-5xl mx-auto mt-12 mb-10" data-aos="zoom-in" data-aos-duration="1200">
+            @php
+    $detailImg = $product->image_url;
+    if ($detailImg && !str_starts_with($detailImg, 'http')) {
+        $detailImg = asset('storage/' . $detailImg);
+    }
+@endphp
+<img src="{{ $detailImg }}" alt="{{ $product->name }}" class="w-full h-auto object-contain ...">
+
+            <!-- ปุ่มเปิด 3D Modal (แสดงเฉพาะเมื่อมีโค้ด embed) -->
+            @if($product->embed_code)
+            <button onclick="openModal360()" class="absolute bottom-4 right-4 md:bottom-12 md:right-12 bg-white/90 backdrop-blur-md border border-gray-200 text-gray-900 px-5 py-3 rounded-full shadow-xl hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center gap-2 group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 group-hover:rotate-180 transition-transform duration-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                <span class="font-semibold">ดูแบบ 360°</span>
+            </button>
+            @endif
+        </div>
+
+        <!-- ข้อมูลสินค้า (ด้านล่างภาพ) -->
+        <div class="text-center z-10 relative space-y-6" data-aos="fade-up" data-aos-delay="200">
+            <!-- แถบประเภทพลังงาน -->
+            <div class="flex justify-center gap-3">
+                @if($product->energy_type)
+                    <span class="px-5 py-1.5 bg-gray-100 text-gray-600 rounded-full text-sm font-medium">{{ $product->energy_type }}</span>
+                @endif
+                @if($product->status_badge)
+                    <span class="px-5 py-1.5 bg-gray-900 text-white rounded-full text-sm font-medium">{{ $product->status_badge }}</span>
+                @endif
+            </div>
+
+            <!-- ชื่อรุ่นและราคา -->
+            <h2 class="text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">{{ $product->name }}</h2>
+            <p class="text-2xl font-light text-gray-500">฿ {{ number_format($product->price, 0) }}</p>
+
+            <p class="text-gray-500 max-w-2xl mx-auto mt-4 leading-relaxed px-4">
+                {{ $product->description ?? $product->short_description }}
+            </p>
+
+            <!-- ปุ่มดำเนินการ -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-6 px-4">
+                <button class="bg-gray-900 text-white px-10 py-3.5 rounded-full font-semibold shadow-lg hover:bg-black hover:shadow-xl transition-all">
+                    สั่งจองทันที
+                </button>
+                <button class="bg-white border-2 border-gray-200 text-gray-900 px-10 py-3.5 rounded-full font-semibold hover:border-gray-900 transition-all">
+                    ทดลองขับ
+                </button>
+            </div>
+        </div>
     </section>
+
+    <!-- สเปคเด่นแบบตารางด้านล่าง -->
+    <section class="max-w-[1200px] mx-auto px-4 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12" data-aos="fade-up" data-aos-delay="300">
+            <div class="bg-gray-50 p-8 rounded-3xl text-center hover:shadow-md transition duration-300">
+                <h3 class="text-4xl font-bold text-gray-900 mb-2">{{ $product->accel_0_100 }}</h3>
+                <p class="text-gray-500 uppercase tracking-wider text-sm">อัตราเร่ง 0-100 กม./ชม.</p>
+            </div>
+            <div class="bg-gray-50 p-8 rounded-3xl text-center hover:shadow-md transition duration-300">
+                <h3 class="text-4xl font-bold text-gray-900 mb-2">{{ $product->max_range }}</h3>
+                <p class="text-gray-500 uppercase tracking-wider text-sm">ระยะทางสูงสุดต่อการชาร์จ</p>
+            </div>
+            <div class="bg-gray-50 p-8 rounded-3xl text-center hover:shadow-md transition duration-300">
+                <h3 class="text-4xl font-bold text-gray-900 mb-2">{{ $product->top_speed }}</h3>
+                <p class="text-gray-500 uppercase tracking-wider text-sm">ความเร็วสูงสุด</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         360° Modal (หน้าต่าง Pop-up แสดงโมเดล 3D)
+         ========================================== -->
+    @if($product->embed_code)
+    <div id="modal360" class="fixed inset-0 z-[100] bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        
+        <!-- ปุ่มปิด Modal -->
+        <button onclick="closeModal360()" class="absolute top-6 right-6 md:top-8 md:right-8 text-gray-900 hover:text-red-500 p-2 transition-colors z-50 bg-gray-100 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div class="w-full max-w-6xl aspect-video md:aspect-[21/9] bg-transparent rounded-2xl overflow-hidden relative shadow-2xl border border-gray-200">
+            @php
+                // แปลงโค้ด Iframe ให้เล่นอัตโนมัติ ธีมสว่าง และซ่อน UI รกๆ
+                $embedCode = $product->embed_code;
+                $embedCode = preg_replace('/src="([^"]+)"/', 'src="$1' . (strpos($embedCode, '?') !== false ? '&' : '?') . 'autostart=1&ui_theme=light&ui_infos=0&ui_watermark=0&transparent=1"', $embedCode);
+            @endphp
+            
+            <div class="w-full h-full [&>div]:!h-full [&>div>iframe]:!w-full [&>div>iframe]:!h-full [&>iframe]:!w-full [&>iframe]:!h-full">
+                {!! $embedCode !!}
+            </div>
+        </div>
+        
+        <p class="text-gray-500 mt-6 text-sm md:text-base font-medium">ใช้เมาส์หรือนิ้วลากเพื่อหมุน ซูม เพื่อดูรายละเอียดรอบคัน</p>
+    </div>
+    @endif
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // เริ่มต้นการทำงานของ AOS Animation
-        AOS.init({
-            duration: 800,
-            once: true,
-        });
+        AOS.init({ duration: 800, once: true });
 
-        // ตัวอย่างการเรียกใช้ SweetAlert2 สำหรับปุ่มซื้อ
-        function buyNow() {
-            Swal.fire({
-                title: 'กรุณาเข้าสู่ระบบ',
-                text: 'คุณต้องเข้าสู่ระบบสมาชิกก่อนทำรายการสั่งซื้อ',
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#1a1a1a',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'เข้าสู่ระบบ',
-                cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // เปลี่ยนหน้าไปยังหน้า Login
-                    window.location.href = '/login'; 
-                }
-            })
+        // ฟังก์ชันควบคุมหน้าต่าง 360 Modal
+        function openModal360() {
+            const modal = document.getElementById('modal360');
+            if(modal) {
+                modal.classList.remove('pointer-events-none');
+                modal.classList.remove('opacity-0');
+                document.body.style.overflow = 'hidden'; // ล็อกไม่ให้หน้าเว็บข้างหลังเลื่อนได้
+            }
+        }
+
+        function closeModal360() {
+            const modal = document.getElementById('modal360');
+            if(modal) {
+                modal.classList.add('opacity-0');
+                modal.classList.add('pointer-events-none');
+                document.body.style.overflow = 'auto'; // ปลดล็อกให้หน้าเว็บเลื่อนได้ปกติ
+            }
+        }
+    </script>
+
+   <script>
+        function openMenu() {
+            const menu = document.getElementById('sideMenu');
+            const backdrop = document.getElementById('menuBackdrop');
+            
+            menu.classList.remove('-translate-x-full');
+            backdrop.classList.remove('pointer-events-none', 'opacity-0');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('sideMenu');
+            const backdrop = document.getElementById('menuBackdrop');
+            
+            menu.classList.add('-translate-x-full');
+            backdrop.classList.add('pointer-events-none', 'opacity-0');
+            document.body.style.overflow = 'auto'; 
         }
     </script>
 </body>
