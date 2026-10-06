@@ -19,12 +19,9 @@ class HomeController extends Controller
     // เพิ่มฟังก์ชัน show ลงไปใหม่ตรงนี้
     public function show($id)
     {
+        // ค้นหาสินค้าจาก ID ถ้าไม่เจอให้แสดงหน้า 404
         $product = Product::findOrFail($id);
         
-        // เพิ่มบรรทัดนี้: ดึงรถทั้งหมดมาด้วย เพื่อเอาไปสร้างรูปในเมนูเบอร์เกอร์
-        $products = Product::latest()->get(); 
-        
-        // ส่งตัวแปร $products แนบไปด้วย
-        return view('frontend.product-detail', compact('product', 'products')); 
+        return view('frontend.product-detail', compact('product'));
     }
 }

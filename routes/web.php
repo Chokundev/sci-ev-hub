@@ -11,6 +11,13 @@ use App\Http\Controllers\OrderController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/product/{id}', [HomeController::class, 'show'])->name('product.detail');
 
+// Route เตรียมไว้สำหรับหน้าอื่นๆ ที่จะพัฒนาต่อ
+Route::get('/test-drive', function () { return 'หน้าจองคิวทดลองขับ (กำลังพัฒนา)'; })->name('test-drive.index');
+Route::get('/contact', function () { return 'หน้าติดต่อเรา (กำลังพัฒนา)'; })->name('contact.index');
+Route::get('/charging-solutions', function () { return 'หน้า EV Charging Solutions (กำลังพัฒนา)'; })->name('charging.index');
+Route::get('/motorsport', function () { return 'หน้า Future of Motorsport (กำลังพัฒนา)'; })->name('motorsport.index');
+Route::get('/electric-suv', function () { return 'หน้า New Electric SUV (กำลังพัฒนา)'; })->name('suv.index');
+
 
 
 // ==========================================
@@ -21,8 +28,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // หน้า Dashboard ของลูกค้า (แสดงประวัติการสั่งซื้อ)
     Route::get('/dashboard', [OrderController::class, 'userDashboard'])->name('dashboard');
 
-    // Route สำหรับกดสั่งซื้อสินค้า
-    Route::post('/checkout/{product}', [OrderController::class, 'store'])->name('checkout.store');
+    // โซนสั่งจองรถยนต์ (Checkout)
+    Route::get('/checkout/{product}', [\App\Http\Controllers\OrderController::class, 'checkout'])->name('checkout.index');
+    Route::post('/checkout/{product}', [\App\Http\Controllers\OrderController::class, 'store'])->name('checkout.store');
+    
+    // เพิ่ม Route สำหรับหน้าสรุปคำสั่งจอง (Success)
+    Route::get('/order/{order}/success', [\App\Http\Controllers\OrderController::class, 'success'])->name('order.success');
 
     // จัดการโปรไฟล์ (ของเดิมจาก Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

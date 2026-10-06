@@ -12,36 +12,27 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
 </head>
-<!-- กำหนด ID ให้ body และเพิ่ม transition-colors เพื่อให้เปลี่ยนสีพื้นหลังแบบสมูท (duration-1000 คือ 1 วินาที) -->
 <body id="page-body" class="bg-gray-50 transition-colors duration-1000 ease-in-out font-sans antialiased overflow-x-hidden text-gray-900">
 
-    <!-- Navbar (แถบบนสุด) -->
-    <!-- Navbar (โปร่งใส 100%) -->
-    <!-- Navbar (โปร่งใส 100% - เมนูซ้าย โลโก้กลาง ไอคอนขวา) -->
+    <!-- Navbar -->
     <nav class="fixed top-0 w-full z-40 bg-transparent">
-        <!-- ใช้ grid grid-cols-3 เพื่อแบ่งพื้นที่ ซ้าย-กลาง-ขวา ให้เท่ากันเป๊ะ -->
         <div class="max-w-[1440px] mx-auto px-6 py-6 grid grid-cols-3 items-center">
             
-            <!-- ฝั่งซ้าย: ปุ่ม Menu -->
             <div class="flex justify-start">
                 <button onclick="openMenu()" class="flex items-center gap-2 text-white hover:text-gray-500 transition-colors group">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
-                    <!-- ข้อความ Menu จะซ่อนในมือถือ และโชว์ในจอใหญ่ขึ้นไป -->
                     <span class="text-sm font-medium tracking-wide hidden sm:block">Menu</span>
                 </button>
             </div>
 
-            <!-- ตรงกลาง: โลโก้ -->
             <div class="flex justify-center text-center">
-                <!-- เพิ่ม id="mainLogo" และคลาส transition-opacity duration-300 เข้าไป -->
-                <a href="/" id="mainLogo" class="text-xl md:text-2xl font-bold tracking-[0.2em] uppercase text-white hover:text-gray-300 transition-opacity duration-300">
+                <a href="{{ route('home') }}" id="mainLogo" class="text-xl md:text-2xl font-bold tracking-[0.2em] uppercase text-white hover:text-gray-300 transition-opacity duration-300">
                     SCI EV Hub
                 </a>
             </div>
             
-            <!-- ฝั่งขวา: ไอคอน Account -->
             <div class="flex justify-end">
                 <a href="{{ Auth::check() ? route('dashboard') : route('login') }}" class="text-white hover:text-gray-500 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -53,9 +44,8 @@
         </div>
     </nav>
 
-    <!-- พื้นหลังสีดำตอนเปิดเมนู (Backdrop) -->
+    <!-- Backdrop เมนู -->
     <div id="menuBackdrop" onclick="closeMenu()" class="fixed inset-0 bg-black/80 z-[90] opacity-0 pointer-events-none transition-opacity duration-300">
-        <!-- ปุ่มปิด (X) ตรงพื้นที่สีดำมุมขวาบน -->
         <button onclick="closeMenu()" class="absolute top-8 right-8 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -63,33 +53,29 @@
         </button>
     </div>
 
-    <!-- แผงเมนูหลัก (สไลด์จากซ้ายไปขวา) -->
-    <!-- แผงเมนูหลัก (สไลด์จากซ้ายไปขวา) -->
+    <!-- แผงเมนูหลัก -->
     <div id="sideMenu" class="fixed top-0 left-0 bottom-0 z-[100] w-full md:w-[90%] lg:w-[85%] max-w-[1200px] bg-white flex flex-col md:flex-row transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-2xl">
         
-        <!-- ============================================== -->
         <!-- ฝั่งซ้าย: ลิงก์เมนู -->
-        <!-- ============================================== -->
         <div class="w-full md:w-[35%] bg-white h-full overflow-y-auto py-8 md:py-12 px-8 flex flex-col border-r border-gray-100">
             <div class="flex flex-col space-y-1">
-                <a href="/" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
+                <a href="{{ route('home') }}" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
                     หน้าแรก
                 </a>
                 
-                <!-- ปุ่มสลับไปหน้ารุ่นรถ -->
                 <button onclick="switchTab('modelsPanel', this)" class="tab-btn flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors w-full text-left rounded-xl bg-gray-100">
                     รุ่นรถยนต์ทั้งหมด
                 </button>
                 
-                <!-- ปุ่มสลับไปหน้าเทคโนโลยี EV -->
                 <button onclick="switchTab('techPanel', this)" class="tab-btn flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors w-full text-left rounded-xl">
                     เทคโนโลยี EV
                 </button>
                 
-                <a href="#" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
+                <!-- อัปเดตลิงก์จริง -->
+                <a href="{{ route('test-drive.index') }}" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
                     จองคิวทดลองขับ
                 </a>
-                <a href="#" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
+                <a href="{{ route('contact.index') }}" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
                     ติดต่อเรา
                 </a>
             </div>
@@ -120,12 +106,8 @@
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ฝั่งขวา: พื้นที่แสดงเนื้อหา (โชว์รูปรถ & เทคโนโลยี) -->
-        <!-- ============================================== -->
+        <!-- ฝั่งขวา: พื้นที่แสดงเนื้อหา -->
         <div class="hidden md:flex w-[65%] bg-[#f9f9f9] h-full overflow-y-auto py-12 px-10 lg:px-20 flex-col items-center relative">
-            
-            <!-- Panel 1: รายการรถยนต์ -->
             <div id="modelsPanel" class="w-full max-w-sm flex flex-col gap-16 pb-20 transition-opacity duration-500">
                 @if(isset($products))
                     @foreach($products as $item)
@@ -146,9 +128,7 @@
                 @endif
             </div>
 
-            <!-- Panel 2: ข้อมูลเทคโนโลยี EV -->
             <div id="techPanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12">
-                
                 <div class="mb-12">
                     <span class="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2 block">Area 9 Innovation</span>
                     <h2 class="text-4xl font-extrabold text-black tracking-tight leading-tight mb-6">ขับเคลื่อนอนาคตด้วย<br>สถาปัตยกรรมไฟฟ้า 800V</h2>
@@ -156,7 +136,6 @@
                         หัวใจหลักของรถยนต์ไฟฟ้าใน SCI EV Hub คือการผสานเทคโนโลยีแบตเตอรี่ขั้นสูงเข้ากับมอเตอร์ประสิทธิภาพสูง เพื่อลบข้อจำกัดเดิมของยานยนต์ไฟฟ้า มอบระยะทางที่ไกลขึ้นและการชาร์จที่รวดเร็วที่สุด
                     </p>
                 </div>
-
                 <div class="grid grid-cols-1 gap-8">
                     <!-- Feature 1 -->
                     <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
@@ -192,11 +171,9 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     
-
     <!-- 1. Hero Section -->
     <section class="relative w-full h-screen flex items-center">
         <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2000&auto=format&fit=crop" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover">
@@ -214,49 +191,43 @@
         </div>
     </section>
 
-    <!-- 2. โซนการ์ดไฮไลต์ 3 ใบ (เอาพื้นหลังออก เพื่อให้กลืนไปกับสีของ body) -->
-    <div id="discover-section" class="pt-24 pb-12 relative z-20 transition-colors duration-1000" id="discover-text">
+    <!-- 2. โซนการ์ดไฮไลต์ 3 ใบ -->
+    <div id="discover-section" class="pt-24 pb-12 relative z-20 transition-colors duration-1000">
         <section class="px-4 max-w-[1200px] mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold transition-colors duration-1000" id="explore-title" data-aos="fade-up">Explore the Future</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="100">
-                <!-- Card 1 -->
-                <a href="#" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <!-- Card 1: อัปเดตลิงก์จริง -->
+                <a href="{{ route('charging.index') }}" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                     <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=1000&auto=format&fit=crop" alt="Accessories" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                         <h3 class="text-white font-semibold text-xl md:text-2xl w-2/3 leading-tight">EV Charging Solutions.</h3>
                         <div class="w-10 h-10 rounded-full border border-white/50 flex items-center justify-center text-white transition-colors group-hover:bg-white group-hover:text-black backdrop-blur-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                         </div>
                     </div>
                 </a>
-                <!-- Card 2 -->
-                <a href="#" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <!-- Card 2: อัปเดตลิงก์จริง -->
+                <a href="{{ route('motorsport.index') }}" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                     <img src="https://images.unsplash.com/photo-1619682817481-e994891cd1f5?q=80&w=1000&auto=format&fit=crop" alt="Motorsport" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                         <h3 class="text-white font-semibold text-xl md:text-2xl w-2/3 leading-tight">Future of Motorsport.</h3>
                         <div class="w-10 h-10 rounded-full border border-white/50 flex items-center justify-center text-white transition-colors group-hover:bg-white group-hover:text-black backdrop-blur-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                         </div>
                     </div>
                 </a>
-                <!-- Card 3 -->
-                <a href="#" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <!-- Card 3: อัปเดตลิงก์จริง -->
+                <a href="{{ route('suv.index') }}" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                     <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=1000&auto=format&fit=crop" alt="SUV" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                         <h3 class="text-white font-semibold text-xl md:text-2xl w-2/3 leading-tight">New Electric SUV.</h3>
                         <div class="w-10 h-10 rounded-full border border-white/50 flex items-center justify-center text-white transition-colors group-hover:bg-white group-hover:text-black backdrop-blur-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
                         </div>
                     </div>
                 </a>
@@ -264,8 +235,7 @@
         </section>
     </div>
 
-    <!-- 3. โซนการ์ดสินค้าหลัก (ตัว Trigger สำหรับสลับสี) -->
-    <!-- เอา bg-[#121212] ออก เพื่อให้มันเปลี่ยนสีตาม body -->
+    <!-- 3. โซนการ์ดสินค้าหลัก -->
     <section id="product-trigger-section" class="pt-24 pb-24 px-4 w-full relative z-10">
         <div class="max-w-[1400px] mx-auto">
             
@@ -274,127 +244,95 @@
             </h2>
 
             @if(isset($products) && $products->count() > 0)
-                <!-- โซนแสดงการ์ด (Grid) -->
-<!-- โซนแสดงการ์ด (Flexbox Accordion Effect) -->
-<div class="flex flex-col gap-4 max-w-[1440px] mx-auto px-6 py-12">
-    
-    <!-- แบ่งสินค้าเป็นแถว แถวละ 2 คัน (เพื่อให้เวลาซูม มันจะสลับกันกินพื้นที่แค่ในแถวตัวเอง) -->
-    @foreach($products->chunk(2) as $chunk)
-        <div class="flex flex-col md:flex-row w-full gap-4 h-[700px] md:h-[450px]">
-            
-            @foreach($chunk as $product)
-                @php
-                    $cardImg = $product->card_image_url ?: $product->image_url;
-                    if ($cardImg && !str_starts_with($cardImg, 'http')) {
-                        $cardImg = asset('storage/' . $cardImg);
-                    } elseif (!$cardImg) {
-                        $cardImg = 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
-                    }
-                @endphp
+                <div class="flex flex-col gap-4 max-w-[1440px] mx-auto px-6 py-12">
+                    @foreach($products->chunk(2) as $chunk)
+                        <div class="flex flex-col md:flex-row w-full gap-4 h-[700px] md:h-[450px]">
+                            @foreach($chunk as $product)
+                                @php
+                                    $cardImg = $product->card_image_url ?: $product->image_url;
+                                    if ($cardImg && !str_starts_with($cardImg, 'http')) {
+                                        $cardImg = asset('storage/' . $cardImg);
+                                    } elseif (!$cardImg) {
+                                        $cardImg = 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+                                    }
+                                @endphp
 
-                <!-- ตัวการ์ด: ใช้ flex-1 และตั้งค่าให้ขยายเป็น flex-[1.8] เมื่อ Hover -->
-                <a href="{{ route('product.detail', $product->id) }}" 
-                   class="relative flex-1 rounded-3xl overflow-hidden group cursor-pointer bg-black transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] hover:flex-[1.8] focus:outline-none">
-
-                    <!-- รูปภาพพื้นหลัง (ซูม 110% พร้อมกับที่การ์ดขยายออก) -->
-                    <img src="{{ $cardImg }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110">
-
-                    <!-- Gradient ไล่สีดำ -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-700 group-hover:opacity-100"></div>
-
-                    <!-- ข้อมูลตัวหนังสือ -->
-                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col justify-end h-full z-10 text-white">
-                        <h3 class="text-4xl md:text-5xl font-bold tracking-tight mb-3 transform transition-transform duration-700 group-hover:-translate-y-2">{{ $product->name }}</h3>
-                        
-                        <div class="flex items-center gap-3 transform transition-transform duration-700 group-hover:-translate-y-2">
-                            @if($product->energy_type)
-                                <span class="px-3 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-[11px] font-semibold tracking-wider uppercase">
-                                    {{ $product->energy_type }}
-                                </span>
-                            @endif
-                            <p class="text-gray-300 text-sm line-clamp-1">
-                                {{ $product->short_description ?? 'สัมผัสประสบการณ์การขับขี่แห่งอนาคต' }}
-                            </p>
+                                <a href="{{ route('product.detail', $product->id) }}" class="relative flex-1 rounded-3xl overflow-hidden group cursor-pointer bg-black transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] hover:flex-[1.8] focus:outline-none">
+                                    <img src="{{ $cardImg }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-700 group-hover:opacity-100"></div>
+                                    <div class="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col justify-end h-full z-10 text-white">
+                                        <h3 class="text-4xl md:text-5xl font-bold tracking-tight mb-3 transform transition-transform duration-700 group-hover:-translate-y-2">{{ $product->name }}</h3>
+                                        <div class="flex items-center gap-3 transform transition-transform duration-700 group-hover:-translate-y-2">
+                                            @if($product->energy_type)
+                                                <span class="px-3 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-[11px] font-semibold tracking-wider uppercase">
+                                                    {{ $product->energy_type }}
+                                                </span>
+                                            @endif
+                                            <p class="text-gray-300 text-sm line-clamp-1">
+                                                {{ $product->short_description ?? 'สัมผัสประสบการณ์การขับขี่แห่งอนาคต' }}
+                                            </p>
+                                        </div>
+                                        <div class="absolute bottom-8 right-8 md:bottom-10 md:right-10 flex items-center gap-2 opacity-0 transform translate-x-8 transition-all duration-700 group-hover:opacity-100 group-hover:translate-x-0 font-medium text-white">
+                                            Explore
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
                         </div>
-                        
-                        <!-- ลูกศร Explore -->
-                        <div class="absolute bottom-8 right-8 md:bottom-10 md:right-10 flex items-center gap-2 opacity-0 transform translate-x-8 transition-all duration-700 group-hover:opacity-100 group-hover:translate-x-0 font-medium text-white">
-                            Explore
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-            @endforeach
-            
-        </div>
-    @endforeach
-
-</div>
+                    @endforeach
+                </div>
             @else
                 <div class="flex items-center justify-center h-[30vh]">
                     <h2 class="text-xl text-gray-500">กำลังเตรียมข้อมูลยานยนต์ไฟฟ้ารุ่นใหม่...</h2>
                 </div>
             @endif
-
         </div>
     </section>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // เริ่มต้น AOS สำหรับแอนิเมชันเลื่อนขึ้น
         AOS.init({ duration: 800, once: true, offset: 100 });
 
-        // ระบบเปลี่ยนสีพื้นหลัง (Scroll Transition)
         document.addEventListener("DOMContentLoaded", function() {
             const body = document.getElementById('page-body');
             const targetSection = document.getElementById('product-trigger-section');
             const titleExplore = document.getElementById('explore-title');
             const titleJourney = document.getElementById('journey-title');
 
-            // ใช้ Intersection Observer ตรวจจับว่าเลื่อนมาถึง Section สินค้าหรือยัง
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    // ถ้าเลื่อนมาถึงส่วนการ์ดสินค้าหลัก (ประมาณ 20% ของพื้นที่)
                     if (entry.isIntersecting) {
-                        // เปลี่ยนพื้นหลังเป็นสีดำ
                         body.classList.remove('bg-gray-50');
                         body.classList.add('bg-[#121212]');
-                        // เปลี่ยนตัวหนังสือเป็นสีขาว
                         titleExplore.classList.remove('text-gray-900');
                         titleExplore.classList.add('text-white');
                         titleJourney.classList.remove('text-gray-900');
                         titleJourney.classList.add('text-white');
                     } else {
-                        // ถ้าเลื่อนกลับขึ้นไป เปลี่ยนพื้นหลังกลับเป็นสีขาว
                         body.classList.add('bg-gray-50');
                         body.classList.remove('bg-[#121212]');
-                        // เปลี่ยนตัวหนังสือกลับเป็นสีดำ
                         titleExplore.classList.add('text-gray-900');
                         titleExplore.classList.remove('text-white');
                         titleJourney.classList.add('text-gray-900');
                         titleJourney.classList.remove('text-white');
                     }
                 });
-            }, {
-                // ทำงานเมื่อโซนเป้าหมายโผล่เข้ามาในจอ 25%
-                threshold: 0.25 
-            });
+            }, { threshold: 0.25 });
 
-            if(targetSection) {
-                observer.observe(targetSection);
-            }
+            if(targetSection) observer.observe(targetSection);
         });
     </script>
+    
     @include('partials.footer')
-    <!-- Script สำหรับเปิด/ปิดเมนู -->
+    
     <script>
         function openMenu() {
             const menu = document.getElementById('sideMenu');
             const backdrop = document.getElementById('menuBackdrop');
-            
             menu.classList.remove('-translate-x-full');
             backdrop.classList.remove('pointer-events-none', 'opacity-0');
             document.body.style.overflow = 'hidden'; 
@@ -403,7 +341,6 @@
         function closeMenu() {
             const menu = document.getElementById('sideMenu');
             const backdrop = document.getElementById('menuBackdrop');
-            
             menu.classList.add('-translate-x-full');
             backdrop.classList.add('pointer-events-none', 'opacity-0');
             document.body.style.overflow = 'auto'; 
@@ -411,30 +348,21 @@
 
         window.addEventListener('scroll', function() {
             const logo = document.getElementById('mainLogo');
-            
-            // ถ้าเลื่อนหน้าจอลงมามากกว่า 50px (หรือปรับตัวเลขได้ตามต้องการ)
             if (window.scrollY > 50) {
-                // ซ่อนโลโก้และปิดการคลิก
                 logo.classList.add('opacity-0', 'pointer-events-none');
             } else {
-                // ถ้ากลับมาบนสุด ให้แสดงโลโก้
                 logo.classList.remove('opacity-0', 'pointer-events-none');
             }
         });
 
         function switchTab(panelId, btnElement) {
-            // 1. จัดการฝั่งซ้าย: ลบพื้นหลังไฮไลต์ออกจากปุ่มสลับหน้าทั้งหมดก่อน
             const tabs = document.querySelectorAll('.tab-btn');
             tabs.forEach(tab => tab.classList.remove('bg-gray-100'));
-
-            // 2. ใส่พื้นหลังไฮไลต์ให้ปุ่มที่เพิ่งถูกคลิก
             btnElement.classList.add('bg-gray-100');
 
-            // 3. จัดการฝั่งขวา: สลับหน้าต่างแสดงผล
             const modelsPanel = document.getElementById('modelsPanel');
             const techPanel = document.getElementById('techPanel');
             
-            // เฟดเนื้อหาปัจจุบันออก
             modelsPanel.classList.add('opacity-0');
             techPanel.classList.add('opacity-0');
             
@@ -442,11 +370,9 @@
                 modelsPanel.classList.add('hidden');
                 techPanel.classList.add('hidden');
                 
-                // โชว์หน้าต่างใหม่
                 const activePanel = document.getElementById(panelId);
                 activePanel.classList.remove('hidden');
                 
-                // ดีเลย์นิดนึงให้ transition ทำงานนุ่มๆ
                 setTimeout(() => {
                     activePanel.classList.remove('opacity-0');
                 }, 50);
