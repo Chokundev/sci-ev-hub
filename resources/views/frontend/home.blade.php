@@ -75,6 +75,11 @@
                 <a href="{{ route('test-drive.index') }}" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
                     จองคิวทดลองขับ
                 </a>
+                @auth
+                <button onclick="switchTab('testDrivePanel', this)" class="tab-btn flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors w-full text-left rounded-xl">
+                    สถานะการจองคิวทดลองขับ
+                </button>
+                @endauth
                 <a href="{{ route('contact.index') }}" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
                     ติดต่อเรา
                 </a>
@@ -91,7 +96,8 @@
                         @if(Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin')
                             <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-black transition-colors">แผงควบคุม (Admin)</a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-black transition-colors">แผงควบคุมลูกค้า</a>
+                            <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-black transition-colors">สถานะการจองรถของคุณ</a>
+                            
                             <a href="{{ route('profile.edit') }}" class="text-gray-600 hover:text-black transition-colors">ตั้งค่าโปรไฟล์</a>
                         @endif
                         <form method="POST" action="{{ route('logout') }}">
@@ -106,8 +112,10 @@
             </div>
         </div>
 
-        <!-- ฝั่งขวา: พื้นที่แสดงเนื้อหา -->
+       <!-- ฝั่งขวา: พื้นที่แสดงเนื้อหา -->
         <div class="hidden md:flex w-[65%] bg-[#f9f9f9] h-full overflow-y-auto py-12 px-10 lg:px-20 flex-col items-center relative">
+            
+            <!-- Panel 1: รายการรถยนต์ -->
             <div id="modelsPanel" class="w-full max-w-sm flex flex-col gap-16 pb-20 transition-opacity duration-500">
                 @if(isset($products))
                     @foreach($products as $item)
@@ -128,6 +136,7 @@
                 @endif
             </div>
 
+            <!-- Panel 2: เทคโนโลยี EV -->
             <div id="techPanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12">
                 <div class="mb-12">
                     <span class="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2 block">Area 9 Innovation</span>
@@ -171,6 +180,118 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Panel 3: สถานะการจองคิวทดลองขับ -->
+            <div id="testDrivePanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12 px-4 md:px-0">
+                @auth
+                    {{-- ตรวจสอบว่ามีการส่งข้อมูล testDrives มาจาก Controller และมีข้อมูลหรือไม่ --}}
+                    @if(isset($testDrives) && $testDrives->count() > 0)
+                        
+                        {{-- วนลูปแสดงข้อมูลการจองทั้งหมดของลูกค้า --}}
+                        <div class="flex flex-col gap-10">
+                            @foreach($testDrives as $booking)
+                                @php
+                                    $car = $booking->product;
+                                    $carImg = $car->image_url ?? '';
+                                    if ($carImg && !str_starts_with($carImg, 'http')) {
+                                        $carImg = asset('storage/' . $carImg);
+                                    } elseif (!$carImg) {
+                                        $carImg = 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                                    }
+                                @endphp
+
+                                <div class="bg-white rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 relative overflow-hidden">
+                                    
+                                    <!-- Header -->
+                                    <div class="flex justify-between items-start border-b border-gray-100 pb-6 mb-8 relative z-10">
+                                        <div>
+                                            <p class="text-[11px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-2">Test Drive Appointment</p>
+                                            <h2 class="text-2xl font-extrabold tracking-tight text-black">
+                                                TD-{{ str_pad($booking->id, 5, '0', STR_PAD_LEFT) }}
+                                            </h2>
+                                        </div>
+                                        <div class="px-3 py-1.5 bg-green-50 rounded-full flex items-center gap-2">
+                                            <span class="relative flex h-2 w-2">
+                                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                              <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                            </span>
+                                            <span class="text-[10px] font-bold tracking-wide uppercase text-green-700">
+                                                {{ $booking->status ?? 'รอยืนยัน' }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Content (รูปรถ & ข้อมูล) -->
+                                    <div class="flex flex-col gap-8 relative z-10">
+                                        <div class="w-full flex flex-col items-center justify-center">
+                                            <img src="{{ $carImg }}" alt="{{ $car->name ?? 'EV Car' }}" class="w-full max-w-[280px] h-auto object-contain drop-shadow-xl hover:scale-[1.05] transition-transform duration-700 mb-4">
+                                            <h3 class="text-xl font-bold text-black">{{ $car->name ?? 'ไม่ระบุรุ่น' }}</h3>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-2 gap-6 pt-6 border-t border-gray-50">
+                                            <div class="col-span-2">
+                                                <h3 class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Date & Time</h3>
+                                                <div class="flex items-baseline gap-3 text-black">
+                                                    <span class="text-4xl font-extrabold">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d') }}</span>
+                                                    <div class="flex flex-col">
+                                                        <span class="text-xs font-bold uppercase tracking-wide">{{ \Carbon\Carbon::parse($booking->booking_date)->format('M Y') }}</span>
+                                                        <span class="text-lg font-bold">{{ \Carbon\Carbon::parse($booking->booking_time)->format('H:i') }} น.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <h3 class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Customer</h3>
+                                                <p class="font-medium text-sm text-black">{{ Auth::user()->name }}</p>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Location</h3>
+                                                <p class="font-medium text-sm text-black">SCI EV Hub</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- แจ้งเตือน -->
+                                    <div class="mt-8 bg-gray-50 rounded-2xl p-5 flex gap-3 items-start relative z-10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400 shrink-0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3Z" /></svg>
+                                        <div class="flex flex-col">
+                                            <p class="text-[11px] text-gray-500 leading-relaxed font-medium">
+                                                กรุณามาถึงก่อนเวลานัดหมาย 15 นาที และเตรียมใบขับขี่ตัวจริงเพื่อลงทะเบียน
+                                            </p>
+                                            @if($booking->notes)
+                                                <p class="text-[11px] text-gray-400 mt-2"><strong>หมายเหตุของคุณ:</strong> {{ $booking->notes }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <!-- กรณีล็อกอินแล้วแต่ยังไม่เคยจองคิว -->
+                        <div class="bg-white rounded-3xl p-12 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 text-center flex flex-col items-center justify-center min-h-[400px]">
+                            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 text-gray-300">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-extrabold text-black mb-2 tracking-tight">ยังไม่มีคิวทดลองขับ</h2>
+                            <p class="text-gray-500 text-sm mb-8 max-w-sm">คุณยังไม่ได้ทำการนัดหมายทดลองขับรถยนต์กับเรา สัมผัสประสบการณ์แห่งอนาคตได้แล้ววันนี้</p>
+                            <a href="/test-drive" class="px-8 py-3 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors tracking-wide">จองคิวทดลองขับตอนนี้</a>
+                        </div>
+                    @endif
+                @else
+                    <!-- กรณีที่ยังไม่ได้ล็อกอิน -->
+                    <div class="bg-white rounded-3xl p-12 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 text-center flex flex-col items-center justify-center min-h-[400px]">
+                        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+                        </div>
+                        <h2 class="text-xl font-extrabold text-black mb-2 tracking-tight">กรุณาเข้าสู่ระบบ</h2>
+                        <p class="text-gray-500 text-sm mb-8 max-w-xs mx-auto">คุณต้องเข้าสู่ระบบเพื่อตรวจสอบข้อมูลและสถานะการนัดหมายของคุณ</p>
+                        <a href="{{ route('login') }}" class="px-8 py-3 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-colors tracking-wide">เข้าสู่ระบบ</a>
+                    </div>
+                @endauth
+            </div>
+
         </div>
     </div>
     
@@ -356,28 +477,72 @@
         });
 
         function switchTab(panelId, btnElement) {
+            // ลบสีไฮไลต์จากปุ่มเดิม และใส่ให้ปุ่มที่เพิ่งกด
             const tabs = document.querySelectorAll('.tab-btn');
             tabs.forEach(tab => tab.classList.remove('bg-gray-100'));
             btnElement.classList.add('bg-gray-100');
 
-            const modelsPanel = document.getElementById('modelsPanel');
-            const techPanel = document.getElementById('techPanel');
+            // รายชื่อ Panel ทั้งหมดที่มีในระบบ
+            const allPanels = ['modelsPanel', 'techPanel', 'testDrivePanel'];
             
-            modelsPanel.classList.add('opacity-0');
-            techPanel.classList.add('opacity-0');
+            // เฟดทุกอันออกก่อน
+            allPanels.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('opacity-0');
+            });
             
             setTimeout(() => {
-                modelsPanel.classList.add('hidden');
-                techPanel.classList.add('hidden');
+                // ซ่อนทุกอันหลังเฟดเสร็จ
+                allPanels.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
                 
+                // โชว์เฉพาะอันที่เลือก
                 const activePanel = document.getElementById(panelId);
-                activePanel.classList.remove('hidden');
-                
-                setTimeout(() => {
-                    activePanel.classList.remove('opacity-0');
-                }, 50);
+                if (activePanel) {
+                    activePanel.classList.remove('hidden');
+                    setTimeout(() => activePanel.classList.remove('opacity-0'), 50);
+                }
             }, 300);
         }
     </script>
+    <!-- โค้ดแจ้งเตือนและเปิดหน้าสถานะอัตโนมัติเมื่อจองคิวสำเร็จ -->
+    @if(session('success'))
+        <!-- 1. ป๊อปอัปแจ้งเตือน (Toast) เด้งมุมขวาบน -->
+        <div id="toast-success" class="fixed top-5 right-5 z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-2xl shadow-xl border-l-4 border-green-500 transform transition-all duration-500" role="alert">
+            <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                </svg>
+            </div>
+            <div class="ms-3 text-sm font-bold text-black">{{ session('success') }}</div>
+            <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8" onclick="this.parentElement.remove()">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- 2. สคริปต์สั่งให้เปิดแถบสถานะการจอง (Panel 3) ทันที -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // หน่วงเวลา 0.3 วินาทีให้เว็บโหลดเสร็จก่อน แล้วค่อยสไลด์เปลี่ยนหน้าต่าง
+                setTimeout(() => {
+                    const testDriveBtn = document.querySelector('button[onclick*="testDrivePanel"]');
+                    if (testDriveBtn) {
+                        switchTab('testDrivePanel', testDriveBtn);
+                    }
+                }, 300);
+
+                // ตั้งเวลาปิดป๊อปอัปแจ้งเตือนอัตโนมัติใน 5 วินาที
+                setTimeout(() => {
+                    const toast = document.getElementById('toast-success');
+                    if (toast) toast.remove();
+                }, 5000);
+            });
+        </script>
+    @endif
 </body>
 </html>

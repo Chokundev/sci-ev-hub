@@ -22,22 +22,24 @@ class TestDriveController extends Controller
 
     public function store(Request $request)
     {
+        // 1. ตรวจสอบข้อมูลที่ส่งมาจากฟอร์ม
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'required',
             'booking_date' => 'required|date|after_or_equal:today',
             'booking_time' => 'required',
-            'notes' => 'nullable|string|max:1000'
         ]);
 
-        TestDrive::create([
-            'user_id' => Auth::id(),
+        // 2. บันทึกลงฐานข้อมูล
+        \App\Models\TestDrive::create([
+            'user_id' => \Illuminate\Support\Facades\Auth::id(),
             'product_id' => $request->product_id,
             'booking_date' => $request->booking_date,
             'booking_time' => $request->booking_time,
             'notes' => $request->notes,
-            'status' => 'pending'
+            'status' => 'Pending', // ใส่สถานะเริ่มต้น
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'ส่งคำขอจองคิวทดลองขับสำเร็จ! เจ้าหน้าที่จะติดต่อกลับเพื่อยืนยันคิว');
+        // 3. เปลี่ยนจากที่เคยเด้งไป dashboard ให้เด้งกลับไปหน้าแรก (/) แทน
+        return redirect('/')->with('success', 'จองคิวทดลองขับเรียบร้อยแล้ว!');
     }
 }

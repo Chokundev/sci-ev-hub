@@ -97,3 +97,5 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 
 // ดึงไฟล์ Route เกี่ยวกับการ Login/Register ของ Breeze เข้ามาทำงานร่วมด้วย
 require __DIR__ . '/auth.php';
+
+

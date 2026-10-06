@@ -9,12 +9,25 @@
 
     <!-- Navbar -->
     <nav class="w-full bg-white shadow-sm border-b border-gray-100 py-4 px-6 sticky top-0 z-50">
-        <div class="max-w-[1200px] mx-auto flex justify-between items-center">
-            <a href="/" class="text-xl font-bold tracking-[0.1em] uppercase text-gray-900">SCI EV Hub</a>
-            <a href="/" class="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-2 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
-                กลับสู่หน้าหลัก
-            </a>
+        <!-- ปรับเป็น grid 3 คอลัมน์ เพื่อให้ปุ่มอยู่ซ้าย และโลโก้อยู่ตรงกลาง -->
+        <div class="max-w-[1200px] mx-auto grid grid-cols-3 items-center">
+            
+            <!-- ฝั่งซ้าย: ปุ่มกลับ -->
+            <div class="flex justify-start">
+                <a href="/" class="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-2 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+                    กลับสู่หน้าหลัก
+                </a>
+            </div>
+
+            <!-- ตรงกลาง: โลโก้ -->
+            <div class="flex justify-center text-center">
+                <a href="/" class="text-xl font-bold tracking-[0.1em] uppercase text-gray-900">SCI EV Hub</a>
+            </div>
+
+            <!-- ฝั่งขวา: ปล่อยว่างไว้รักษาสมดุล -->
+            <div class="flex justify-end"></div>
+            
         </div>
     </nav>
 
@@ -44,8 +57,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($products as $car)
                         @php
-                            // เลือกรูปภาพที่จะมาแสดงในการ์ด
-                            $img = $car->card_image_url ?: $car->image_url;
+                            // ดึงรูปรถจากหน้าดีเทลมาแสดงโดยตรง
+                            $img = $car->image_url;
                             if ($img && !str_starts_with($img, 'http')) {
                                 $img = asset('storage/' . $img);
                             } elseif (!$img) {
@@ -67,7 +80,7 @@
                                     </svg>
                                 </div>
 
-                                <img src="{{ $img }}" alt="{{ $car->name }}" class="w-full h-32 object-contain mb-4 transform transition-transform duration-500 group-hover:scale-110">
+                                <img src="{{ $img }}" alt="{{ $car->name }}" class="w-full h-32 object-contain mb-4 transform transition-transform duration-500 group-hover:scale-110 drop-shadow-md">
                                 
                                 <div class="text-center w-full mt-auto">
                                     <h4 class="font-bold text-gray-900 text-lg">{{ $car->name }}</h4>
