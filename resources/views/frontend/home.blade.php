@@ -34,7 +34,7 @@
             </div>
             
             <div class="flex justify-end">
-                <a href="{{ Auth::check() ? route('dashboard') : route('login') }}" class="text-white hover:text-gray-500 transition-colors">
+                <a href="{{ Auth::check() ? route('profile.edit') : route('login') }}" class="text-white hover:text-gray-500 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
@@ -139,7 +139,7 @@
             <!-- Panel 2: เทคโนโลยี EV -->
             <div id="techPanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12">
                 <div class="mb-12">
-                    <span class="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2 block">Area 9 Innovation</span>
+                    <span class="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2 block">Innovation</span>
                     <h2 class="text-4xl font-extrabold text-black tracking-tight leading-tight mb-6">ขับเคลื่อนอนาคตด้วย<br>สถาปัตยกรรมไฟฟ้า 800V</h2>
                     <p class="text-gray-600 text-[16px] leading-relaxed">
                         หัวใจหลักของรถยนต์ไฟฟ้าใน SCI EV Hub คือการผสานเทคโนโลยีแบตเตอรี่ขั้นสูงเข้ากับมอเตอร์ประสิทธิภาพสูง เพื่อลบข้อจำกัดเดิมของยานยนต์ไฟฟ้า มอบระยะทางที่ไกลขึ้นและการชาร์จที่รวดเร็วที่สุด
@@ -297,7 +297,7 @@
     
     <!-- 1. Hero Section -->
     <section class="relative w-full h-screen flex items-center">
-        <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2000&auto=format&fit=crop" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover">
+        <img src="https://a.storyblok.com/f/322327/3840x2160/ddbfabfa70/taycan-driving-front.jpg/m/2500x1406/smart/filters:format(avif)" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
 
         <div class="relative z-10 w-full max-w-[1400px] mx-auto px-4 md:px-8">
@@ -312,55 +312,83 @@
         </div>
     </section>
 
-    <!-- 2. โซนการ์ดไฮไลต์ 3 ใบ -->
-    <div id="discover-section" class="pt-24 pb-12 relative z-20 transition-colors duration-1000">
-        <section class="px-4 max-w-[1200px] mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold transition-colors duration-1000" id="explore-title" data-aos="fade-up">Explore the Future</h2>
+    <!-- Section: Explore by Category -->
+<!-- ปรับ max-w ให้แคบลงนิดนึงเป็น 6xl และลด mb-32 เหลือ mb-16 เพื่อลดช่องว่างด้านล่าง -->
+<div class="mt-20 mb-16 max-w-6xl mx-auto px-6" id="explore-section">
+    <h2 id="explore-text" class="text-3xl md:text-4xl font-extrabold text-center mb-10 tracking-tight text-black transition-colors duration-300"
+        data-aos="fade-up" data-aos-duration="800">
+        Explore the Future
+    </h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Card 1: 100% Electric -->
+        <!-- ปรับความสูงจาก h-[450px] เป็น h-[320px] ให้เล็กลงกำลังดี -->
+        <a href="/category/electric" class="group relative block h-[280px] md:h-[320px] rounded-3xl overflow-hidden cursor-pointer"
+           data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+            <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="100% Electric" 
+                 class="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            
+            <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                <div>
+                    <p class="text-[10px] font-bold tracking-widest text-white/70 uppercase mb-2">Zero Emissions</p>
+                    <h3 class="text-white text-xl md:text-2xl font-bold">100% <br>Electric.</h3>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="100">
-                <!-- Card 1: อัปเดตลิงก์จริง -->
-                <a href="{{ route('charging.index') }}" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                    <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=1000&auto=format&fit=crop" alt="Accessories" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                        <h3 class="text-white font-semibold text-xl md:text-2xl w-2/3 leading-tight">EV Charging Solutions.</h3>
-                        <div class="w-10 h-10 rounded-full border border-white/50 flex items-center justify-center text-white transition-colors group-hover:bg-white group-hover:text-black backdrop-blur-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                        </div>
-                    </div>
-                </a>
-                <!-- Card 2: อัปเดตลิงก์จริง -->
-                <a href="{{ route('motorsport.index') }}" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                    <img src="https://images.unsplash.com/photo-1619682817481-e994891cd1f5?q=80&w=1000&auto=format&fit=crop" alt="Motorsport" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                        <h3 class="text-white font-semibold text-xl md:text-2xl w-2/3 leading-tight">Future of Motorsport.</h3>
-                        <div class="w-10 h-10 rounded-full border border-white/50 flex items-center justify-center text-white transition-colors group-hover:bg-white group-hover:text-black backdrop-blur-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                        </div>
-                    </div>
-                </a>
-                <!-- Card 3: อัปเดตลิงก์จริง -->
-                <a href="{{ route('suv.index') }}" class="group relative block h-64 md:h-72 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                    <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=1000&auto=format&fit=crop" alt="SUV" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-                        <h3 class="text-white font-semibold text-xl md:text-2xl w-2/3 leading-tight">New Electric SUV.</h3>
-                        <div class="w-10 h-10 rounded-full border border-white/50 flex items-center justify-center text-white transition-colors group-hover:bg-white group-hover:text-black backdrop-blur-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-                        </div>
-                    </div>
-                </a>
+        </a>
+
+        <!-- Card 2: Hybrid Power -->
+        <a href="/category/hybrid" class="group relative block h-[280px] md:h-[320px] rounded-3xl overflow-hidden cursor-pointer"
+           data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+            <img src="https://images.unsplash.com/photo-1619682817481-e994891cd1f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Hybrid Power" 
+                 class="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            
+            <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                <div>
+                    <p class="text-[10px] font-bold tracking-widest text-white/70 uppercase mb-2">Best of Both Worlds</p>
+                    <h3 class="text-white text-xl md:text-2xl font-bold">Hybrid <br>Power.</h3>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                </div>
             </div>
-        </section>
+        </a>
+
+        <!-- Card 3: EV Charging Solutions -->
+        <a href="/charging-solutions" class="group relative block h-[280px] md:h-[320px] rounded-3xl overflow-hidden cursor-pointer"
+           data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+            <!-- ใช้ลิงก์รูปภาพของคุณ -->
+            <img src="https://cdn.gettgo.assets.mtb.co.th/20240423-064550-blobid1713854743509.jpg" 
+                 alt="EV Charging Solutions" 
+                 class="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            
+            <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                <div>
+                    <p class="text-[10px] font-bold tracking-widest text-white/70 uppercase mb-2">Infrastructure</p>
+                    <h3 class="text-white text-xl md:text-2xl font-bold">Charging <br>Solutions.</h3>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-white backdrop-blur-sm transition-colors duration-300 group-hover:bg-white group-hover:text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                </div>
+            </div>
+        </a>
+
     </div>
+</div>
 
     <!-- 3. โซนการ์ดสินค้าหลัก -->
     <section id="product-trigger-section" class="pt-24 pb-24 px-4 w-full relative z-10">
         <div class="max-w-[1400px] mx-auto">
             
-            <h2 id="journey-title" class="text-4xl md:text-5xl font-bold mb-16 text-center transition-colors duration-1000 text-gray-900" data-aos="fade-up">
+            <h2 id="journey-text" class="text-3xl md:text-4xl font-extrabold text-center mb-10 tracking-tight text-black transition-colors duration-300">
                 Your SCI EV journey starts now.
             </h2>
 
@@ -544,5 +572,46 @@
             });
         </script>
     @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const journeyText = document.getElementById('journey-text');
+            const triggerSection = document.getElementById('product-trigger-section');
+
+            // เพิ่มตัวแปรสำหรับ Explore the Future
+            const exploreText = document.getElementById('explore-text');
+            const exploreSection = document.getElementById('explore-section');
+
+            // รวม Event Listener
+            window.addEventListener('scroll', function() {
+                
+                // สำหรับ Your SCI EV journey starts now.
+                if (journeyText && triggerSection) {
+                    const sectionRect = triggerSection.getBoundingClientRect();
+                    if (sectionRect.top <= window.innerHeight * 0.7) {
+                        journeyText.classList.remove('text-black');
+                        journeyText.classList.add('text-white');
+                    } else {
+                        journeyText.classList.remove('text-white');
+                        journeyText.classList.add('text-black');
+                    }
+                }
+
+                // สำหรับ Explore the Future
+                if (exploreText && exploreSection) {
+                    const exploreRect = exploreSection.getBoundingClientRect();
+                    // ตรวจสอบว่าโซน Explore the Future เลื่อนมาถึงโซนสีดำหรือยัง
+                    // ถ้าส่วนขอบล่างของกล่อง explore-section (หรือส่วนอื่นที่คุณกำหนดเป็นจุดทริกเกอร์สีดำ) 
+                    // เข้ามาในจอเกิน 20% ของจอ ก็ให้เปลี่ยนสีเลย ปรับค่า 0.2 ตรงนี้ได้ครับ
+                    if (exploreRect.bottom <= window.innerHeight * 0.6) { 
+                        exploreText.classList.remove('text-black');
+                        exploreText.classList.add('text-white');
+                    } else {
+                        exploreText.classList.remove('text-white');
+                        exploreText.classList.add('text-black');
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

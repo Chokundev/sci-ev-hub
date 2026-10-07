@@ -91,3 +91,10 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
 
 // ดึงไฟล์ Route เกี่ยวกับการ Login/Register ของ Breeze เข้ามาทำงานร่วมด้วย
 require __DIR__.'/auth.php';
+
+Route::get('/category/{type}', [\App\Http\Controllers\HomeController::class, 'category'])->name('category.show');
+
+// Route สำหรับหน้า EV Charging Solutions
+Route::get('/charging-solutions', function () {
+    return view('frontend.charging');
+})->name('charging.index');

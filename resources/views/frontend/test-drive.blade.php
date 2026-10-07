@@ -154,6 +154,54 @@
             
         </form>
     </main>
+<!-- นำเข้า SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    @if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ใช้ Swal.fire แบบกำหนด Custom HTML เองเพื่อให้ล้างดีไซน์เขียวเดิมออกหมดเกลี้ยง
+            Swal.fire({
+                html: `
+                    <div style="display: flex; align-items: center; text-align: left; width: 100%;">
+                        <div style="background-color: #ffffff; color: #000000; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;"><path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" /></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 14px; font-weight: 600; color: #ffffff; margin-bottom: 2px; letter-spacing: 0.3px;">จองคิวทดลองขับเรียบร้อยแล้ว</div>
+                            <div style="font-size: 12px; color: #a3a3a3; font-weight: 400;">เจ้าหน้าที่จะติดต่อกลับเพื่อยืนยันนัดหมายโดยเร็วที่สุด</div>
+                        </div>
+                    </div>
+                `,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: false,
+                background: '#1a1a1a',
+                color: '#ffffff',
+                padding: '16px 20px',
+                width: 'auto',
+                customClass: {
+                    popup: 'custom-premium-popup'
+                },
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+        });
+    </script>
+
+    <!-- CSS ปรับแต่งขอบและตำแหน่ง -->
+    <style>
+        .custom-premium-popup {
+            border-radius: 14px !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin-top: 80px !important;
+        }
+    </style>
+    @endif
 </body>
 </html>

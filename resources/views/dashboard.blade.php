@@ -161,47 +161,58 @@
         <!-- ส่วนที่ 2: สถานะการนัดหมายทดลองขับ (Test Drives) -->
         <!-- ============================================== -->
         @if(isset($testDrives) && $testDrives->count() > 0)
-            <div class="mt-10">
-                <div class="mb-12">
-                    <p class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-3">Your Appointments</p>
-                    <h2 class="text-3xl font-extrabold tracking-tight">นัดหมายทดลองขับ</h2>
+            <div class="mt-20">
+                <div class="mb-12 border-b border-gray-200 pb-6 flex justify-between items-end">
+                    <div>
+                        <p class="text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-3">Your Appointments</p>
+                        <h2 class="text-3xl font-extrabold tracking-tight">นัดหมายทดลองขับ</h2>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                     @foreach($testDrives as $drive)
-                        <div class="border border-gray-200 rounded-2xl p-8 hover:border-gray-900 transition-colors bg-white relative overflow-hidden group">
+                        <!-- Card Design ไร้กรอบ เน้นเงาบางๆ และ Background สีอ่อน -->
+                        <div class="bg-[#fafafa] rounded-2xl p-8 hover:bg-[#f0f0f0] transition-colors relative overflow-hidden group">
                             
-                            <!-- แถบสีสถานะด้านบน -->
-                            <div class="absolute top-0 left-0 right-0 h-1 {{ $drive->status == 'confirmed' ? 'bg-blue-500' : ($drive->status == 'completed' ? 'bg-green-500' : ($drive->status == 'cancelled' ? 'bg-red-500' : 'bg-yellow-400')) }}"></div>
-
-                            <div class="flex justify-between items-start mb-8">
-                                <div>
-                                    <p class="text-[11px] font-bold tracking-widest text-gray-400 uppercase mb-1">Vehicle Model</p>
-                                    <h4 class="text-2xl font-bold text-gray-900">{{ $drive->product->name }}</h4>
+                            <!-- ไฟสถานะ (Status Indicator) รูปแบบใหม่ -->
+                            <div class="flex justify-between items-center mb-8">
+                                <div class="inline-flex items-center gap-2">
+                                     <span class="relative flex h-2.5 w-2.5">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 
+                                            {{ strtolower($drive->status) == 'confirmed' || strtolower($drive->status) == 'completed' ? 'bg-green-400' : (strtolower($drive->status) == 'cancelled' ? 'bg-red-400' : 'bg-yellow-400') }}">
+                                        </span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 
+                                            {{ strtolower($drive->status) == 'confirmed' || strtolower($drive->status) == 'completed' ? 'bg-green-500' : (strtolower($drive->status) == 'cancelled' ? 'bg-red-500' : 'bg-yellow-500') }}">
+                                        </span>
+                                    </span>
+                                    <span class="text-xs font-bold tracking-widest uppercase 
+                                        {{ strtolower($drive->status) == 'confirmed' || strtolower($drive->status) == 'completed' ? 'text-green-700' : (strtolower($drive->status) == 'cancelled' ? 'text-red-700' : 'text-yellow-600') }}">
+                                        {{ $drive->status }}
+                                    </span>
                                 </div>
-                                <span class="px-4 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase border 
-                                    {{ $drive->status == 'confirmed' ? 'border-blue-200 text-blue-700 bg-blue-50' : 
-                                      ($drive->status == 'completed' ? 'border-green-200 text-green-700 bg-green-50' : 
-                                      ($drive->status == 'cancelled' ? 'border-red-200 text-red-700 bg-red-50' : 'border-yellow-200 text-yellow-700 bg-yellow-50')) }}">
-                                    {{ $drive->status }}
-                                </span>
+                                <span class="text-[10px] font-bold tracking-widest text-gray-400 uppercase">Test Drive</span>
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-6 bg-gray-50 p-6 rounded-xl">
+                            <div class="mb-8">
+                                <h4 class="text-3xl font-extrabold text-gray-900 tracking-tight uppercase">{{ $drive->product->name }}</h4>
+                            </div>
+                            
+                            <!-- วันที่และเวลา (ไม่มีพื้นหลังทึบ แยกเป็นบรรทัดชัดเจน) -->
+                            <div class="flex flex-row justify-start gap-12 border-t border-gray-200 pt-6">
                                 <div>
-                                    <p class="text-[11px] font-bold tracking-widest text-gray-400 uppercase mb-2">Date</p>
-                                    <p class="font-semibold text-gray-900">{{ \Carbon\Carbon::parse($drive->booking_date)->format('d M Y') }}</p>
+                                    <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Date</p>
+                                    <p class="font-bold text-lg text-gray-900">{{ \Carbon\Carbon::parse($drive->booking_date)->format('d M Y') }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-[11px] font-bold tracking-widest text-gray-400 uppercase mb-2">Time</p>
-                                    <p class="font-semibold text-gray-900">{{ \Carbon\Carbon::parse($drive->booking_time)->format('H:i') }} น.</p>
+                                    <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Time</p>
+                                    <p class="font-bold text-lg text-gray-900">{{ \Carbon\Carbon::parse($drive->booking_time)->format('H:i') }} น.</p>
                                 </div>
                             </div>
 
                             @if($drive->notes)
-                                <div class="mt-6 pt-6 border-t border-gray-100">
-                                    <p class="text-[11px] font-bold tracking-widest text-gray-400 uppercase mb-2">Notes</p>
-                                    <p class="text-sm text-gray-600">{{ $drive->notes }}</p>
+                                <div class="mt-6 pt-6 border-t border-gray-200">
+                                    <p class="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-2">Notes</p>
+                                    <p class="text-sm text-gray-600 leading-relaxed">{{ $drive->notes }}</p>
                                 </div>
                             @endif
                         </div>

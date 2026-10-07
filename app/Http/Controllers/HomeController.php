@@ -43,4 +43,15 @@ class HomeController extends Controller
     // ส่งไปทั้ง $product (คันที่เลือก) และ $products (ทั้งหมด)
     return view('frontend.product-detail', compact('product', 'products', 'testDrives')); 
 }
+public function category($type)
+    {
+        // 1. แปลงข้อความจาก URL ให้ตรงกับในฐานข้อมูล (เช่น electric -> Electric)
+        $energyType = ucfirst(strtolower($type));
+        
+        // 2. ดึงข้อมูลรถยนต์เฉพาะรุ่นที่มี energy_type ตรงกับที่เลือก
+        $products = \App\Models\Product::where('energy_type', $energyType)->get();
+        
+        // 3. ส่งข้อมูลไปที่หน้า category.blade.php
+        return view('frontend.category', compact('products', 'energyType'));
+    }
 }

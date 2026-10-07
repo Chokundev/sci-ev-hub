@@ -27,9 +27,9 @@
                     <h3 class="text-[17px] font-bold text-black mb-6">เมนูลัด</h3>
                     <ul class="space-y-4">
                         <li><a href="{{ route('home') }}" class="text-gray-600 hover:text-black transition-colors text-[15px]">หน้าหลัก (Home)</a></li>
-                        <li><a href="{{ route('suv.index') }}" class="text-gray-600 hover:text-black transition-colors text-[15px]">รถยนต์ SUV</a></li>
-                        <li><a href="{{ route('charging.index') }}" class="text-gray-600 hover:text-black transition-colors text-[15px]">สถานีชาร์จ (Charging)</a></li>
-                        <li><a href="{{ route('motorsport.index') }}" class="text-gray-600 hover:text-black transition-colors text-[15px]">มอเตอร์สปอร์ต</a></li>
+                        <li><a href="/category/electric" class="text-gray-600 hover:text-black transition-colors text-[15px]">100% Electric</a></li>
+                        <li><a href="/category/hybrid" class="text-gray-600 hover:text-black transition-colors text-[15px]">Hybrid Power</a></li>
+                        <li><a href="/charging-solutions" class="text-gray-600 hover:text-black transition-colors text-[15px]">Charging Solutions</a></li>
                         <li><a href="{{ route('test-drive.index') }}" class="text-gray-600 hover:text-black transition-colors text-[15px]">จองทดลองขับ</a></li>
                     </ul>
                 </div>
