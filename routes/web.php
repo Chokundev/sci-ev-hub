@@ -98,3 +98,26 @@ Route::get('/category/{type}', [\App\Http\Controllers\HomeController::class, 'ca
 Route::get('/charging-solutions', function () {
     return view('frontend.charging');
 })->name('charging.index');
+
+// Route ชั่วคราวสำหรับสร้าง Storage Link บน Shared Hosting (ไม่มี SSH)
+Route::get('/create-symlink', function () {
+    $targetFolder = storage_path('app/public');
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+    
+    // ตรวจสอบและรันคำสั่ง Artisan
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'สร้าง Storage Link สำเร็จ! รูปภาพสามารถใช้งานได้แล้ว <a href="/">กลับหน้าหลัก</a>';
+    } catch (\Exception $e) {
+        return 'เกิดข้อผิดพลาด: ' . $e->getMessage();
+    }
+});
+
+Route::get('/setup-storage', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return '✅ สร้าง Storage Link สำเร็จ! <a href="/">กลับหน้าหลัก</a>';
+    } catch (\Exception $e) {
+        return '❌ เกิดข้อผิดพลาด: ' . $e->getMessage();
+    }
+});
