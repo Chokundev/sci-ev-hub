@@ -305,7 +305,7 @@
                 <h1 class="text-6xl md:text-8xl font-bold text-white leading-tight mb-8">
                     The new <br>EV Generation.
                 </h1>
-                <a href="#discover-section" class="inline-block px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/50 text-white rounded hover:bg-white hover:text-black transition-all duration-300 font-medium">
+                <a href="#explore-section" class="inline-block px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/50 text-white rounded hover:bg-white hover:text-black transition-all duration-300 font-medium">
                     Discover now
                 </a>
             </div>
