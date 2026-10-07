@@ -74,14 +74,44 @@
                 <div class="flex items-center gap-8">
                     <div class="flex items-center gap-4">
                         <!-- ไอคอนโปรไฟล์มินิมอล -->
-                        <div class="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center text-black font-extrabold text-lg border border-gray-200 shadow-sm">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </div>
-                        <div class="text-left hidden sm:block">
-                            <p class="text-sm font-bold text-gray-900 leading-tight">{{ Auth::user()->name }}</p>
-                            <p class="text-[10px] tracking-widest text-gray-400 uppercase font-bold mt-0.5">{{ Auth::user()->role }}</p>
-                        </div>
-                    </div>
+                        <div class="flex items-center gap-4">
+    <!-- ไอคอนโปรไฟล์ -->
+    <div class="flex items-center gap-4">
+    <!-- ไอคอนโปรไฟล์ -->
+    <div class="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center text-black font-extrabold text-lg border border-gray-200 shadow-sm overflow-hidden shrink-0 relative">
+        
+        @php
+            $profileImg = Auth::user()->avatar;
+            // ถ้าพาธมีคำว่า public/ นำหน้า ให้ตัดออกเพื่อให้ใช้กับ asset('storage/...') ได้ถูกต้อง
+            if ($profileImg && str_starts_with($profileImg, 'public/')) {
+                $profileImg = substr($profileImg, 7);
+            }
+        @endphp
+
+        @if($profileImg)
+            <!-- ใช้ onerror เพื่อดักว่าถ้ารูปพัง (404) ให้ซ่อนรูป แล้วโชว์ตัวอักษรย่อแทน -->
+            <img src="{{ str_starts_with($profileImg, 'http') ? $profileImg : asset('storage/' . $profileImg) }}" 
+                 alt="Profile" 
+                 class="w-full h-full object-cover"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                 
+            <!-- ตัวอักษรย่อสำรอง (จะซ่อนไว้ก่อน ถ้ารูปพังโค้ดด้านบนถึงจะสั่งให้แสดง) -->
+            <div class="absolute inset-0 bg-gray-100 hidden items-center justify-center text-black font-extrabold text-lg">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            </div>
+        @else
+            <!-- ถ้าไม่มีรูปแต่แรก ให้โชว์ตัวอักษร -->
+            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+        @endif
+
+    </div>
+    
+    <!-- ชื่อและ Role -->
+    <div class="text-left hidden sm:block">
+        <p class="text-sm font-bold text-gray-900 leading-tight">{{ Auth::user()->name }}</p>
+        <p class="text-[10px] tracking-widest text-gray-400 uppercase font-bold mt-0.5">{{ Auth::user()->role }}</p>
+    </div>
+</div>
                     
                     <!-- ปุ่มออกจากระบบ -->
                     <form method="POST" action="{{ route('logout') }}" class="border-l border-gray-200 pl-8">
