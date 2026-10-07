@@ -54,10 +54,10 @@
     </div>
 
     <!-- แผงเมนูหลัก -->
-    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 z-[100] w-full md:w-[90%] lg:w-[85%] max-w-[1200px] bg-white flex flex-col md:flex-row transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-2xl">
+    <div id="sideMenu" class="fixed top-0 left-0 bottom-0 z-[100] w-full md:w-[90%] lg:w-[85%] max-w-[1200px] bg-white flex flex-col md:flex-row transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-2xl overflow-y-auto md:overflow-hidden">
         
         <!-- ฝั่งซ้าย: ลิงก์เมนู -->
-        <div class="w-full md:w-[35%] bg-white h-full overflow-y-auto py-8 md:py-12 px-8 flex flex-col border-r border-gray-100">
+        <div class="w-full md:w-[35%] bg-white md:h-full md:overflow-y-auto py-8 md:py-12 px-8 flex flex-col border-b md:border-b-0 md:border-r border-gray-100 shrink-0">
             <div class="flex flex-col space-y-1">
                 <a href="{{ route('home') }}" class="flex items-center justify-between py-4 text-[17px] font-medium text-black hover:bg-gray-50 px-4 -mx-4 transition-colors rounded-xl">
                     หน้าแรก
@@ -113,7 +113,7 @@
         </div>
 
        <!-- ฝั่งขวา: พื้นที่แสดงเนื้อหา -->
-        <div class="hidden md:flex w-[65%] bg-[#f9f9f9] h-full overflow-y-auto py-12 px-10 lg:px-20 flex-col items-center relative">
+        <div class="flex w-full md:w-[65%] bg-white md:h-full md:overflow-y-auto py-12 px-6 md:px-10 lg:px-20 flex-col items-center relative min-h-[50vh]">
             
             <!-- Panel 1: รายการรถยนต์ -->
             <div id="modelsPanel" class="w-full max-w-sm flex flex-col gap-16 pb-20 transition-opacity duration-500">
@@ -137,49 +137,59 @@
             </div>
 
             <!-- Panel 2: เทคโนโลยี EV -->
-            <div id="techPanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12">
-                <div class="mb-12">
-                    <span class="text-xs font-bold tracking-widest uppercase text-gray-500 mb-2 block">Innovation</span>
-                    <h2 class="text-4xl font-extrabold text-black tracking-tight leading-tight mb-6">ขับเคลื่อนอนาคตด้วย<br>สถาปัตยกรรมไฟฟ้า 800V</h2>
-                    <p class="text-gray-600 text-[16px] leading-relaxed">
-                        หัวใจหลักของรถยนต์ไฟฟ้าใน SCI EV Hub คือการผสานเทคโนโลยีแบตเตอรี่ขั้นสูงเข้ากับมอเตอร์ประสิทธิภาพสูง เพื่อลบข้อจำกัดเดิมของยานยนต์ไฟฟ้า มอบระยะทางที่ไกลขึ้นและการชาร์จที่รวดเร็วที่สุด
-                    </p>
-                </div>
-                <div class="grid grid-cols-1 gap-8">
-                    <!-- Feature 1 -->
-                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-black mb-3">Ultra-Fast DC Charging</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">
-                            รองรับเทคโนโลยีการชาร์จไฟฟ้ากระแสตรง (DC Fast Charge) สูงสุด 350 kW ภายใต้สถาปัตยกรรม 800 โวลต์ สามารถชาร์จพลังงานจาก 10% ถึง 80% ได้ภายในเวลาเพียง 18 นาที
-                        </p>
-                    </div>
+<div id="techPanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12 px-2 md:px-0 mt-4 md:mt-0">
+    
+    <!-- ส่วนหัวข้อ -->
+    <div class="mb-10 px-2 md:px-0">
+        <span class="text-[11px] font-extrabold tracking-widest uppercase text-gray-400 mb-3 block">Innovation</span>
+        <!-- ปรับขนาดฟอนต์ให้เล็กลงในมือถือ (text-3xl) และเอา <br> ออกในมือถือเพื่อไม่ให้ตัดคำแปลกๆ -->
+        <h2 class="text-3xl md:text-4xl font-extrabold text-black tracking-tight leading-tight mb-5">
+            ขับเคลื่อนอนาคตด้วย<br class="hidden md:block">สถาปัตยกรรมไฟฟ้า 800V
+        </h2>
+        <p class="text-gray-500 text-[15px] leading-relaxed">
+            หัวใจหลักของรถยนต์ไฟฟ้าใน SCI EV Hub คือการผสานเทคโนโลยีแบตเตอรี่ขั้นสูงเข้ากับมอเตอร์ประสิทธิภาพสูง เพื่อลบข้อจำกัดเดิมของยานยนต์ไฟฟ้า มอบระยะทางที่ไกลขึ้นและการชาร์จที่รวดเร็วที่สุด
+        </p>
+    </div>
 
-                    <!-- Feature 2 -->
-                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-black mb-3">LFP & NMC Battery Cell</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">
-                            ระบบจัดการแบตเตอรี่ (BMS) ขั้นสูง ควบคุมอุณหภูมิเซลล์แบตเตอรี่แบบ Liquid Cooling เพิ่มรอบอายุการใช้งาน (Cycle Life) ให้ยาวนานกว่า 1,500,000 กิโลเมตร และป้องกันความร้อนสะสม
-                        </p>
-                    </div>
-
-                    <!-- Feature 3 -->
-                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-black mb-3">Regenerative Braking</h3>
-                        <p class="text-gray-500 text-sm leading-relaxed">
-                            ระบบดึงพลังงานจลน์จากการเบรกและการถอนคันเร่งกลับมาแปลงเป็นพลังงานไฟฟ้า ช่วยเพิ่มระยะทางขับขี่ (Range) ได้สูงสุดถึง 15-20% พร้อมรองรับระบบ One-Pedal Driving
-                        </p>
-                    </div>
-                </div>
+    <!-- ส่วนการ์ดฟีเจอร์ -->
+    <div class="grid grid-cols-1 gap-5 px-1 md:px-0">
+        
+        <!-- Feature 1 -->
+        <!-- เปลี่ยน bg-white เป็น bg-gray-50 เพื่อให้ตัวการ์ดเด้งแยกออกจากพื้นหลังหลักที่เป็นสีขาว -->
+        <div class="bg-gray-50 p-7 md:p-8 rounded-3xl border border-gray-100 hover:bg-gray-100 transition-colors">
+            <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mb-5 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
             </div>
+            <h3 class="text-lg md:text-xl font-bold text-black mb-2">Ultra-Fast DC Charging</h3>
+            <p class="text-gray-500 text-[14px] leading-relaxed">
+                รองรับเทคโนโลยีการชาร์จไฟฟ้ากระแสตรง (DC Fast Charge) สูงสุด 350 kW ภายใต้สถาปัตยกรรม 800 โวลต์ สามารถชาร์จพลังงานจาก 10% ถึง 80% ได้ภายในเวลาเพียง 18 นาที
+            </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="bg-gray-50 p-7 md:p-8 rounded-3xl border border-gray-100 hover:bg-gray-100 transition-colors">
+            <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mb-5 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" /></svg>
+            </div>
+            <h3 class="text-lg md:text-xl font-bold text-black mb-2">LFP & NMC Battery Cell</h3>
+            <p class="text-gray-500 text-[14px] leading-relaxed">
+                ระบบจัดการแบตเตอรี่ (BMS) ขั้นสูง ควบคุมอุณหภูมิเซลล์แบตเตอรี่แบบ Liquid Cooling เพิ่มรอบอายุการใช้งาน (Cycle Life) ให้ยาวนานกว่า 1,500,000 กิโลเมตร และป้องกันความร้อนสะสม
+            </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-gray-50 p-7 md:p-8 rounded-3xl border border-gray-100 hover:bg-gray-100 transition-colors">
+            <div class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center mb-5 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+            </div>
+            <h3 class="text-lg md:text-xl font-bold text-black mb-2">Regenerative Braking</h3>
+            <p class="text-gray-500 text-[14px] leading-relaxed">
+                ระบบดึงพลังงานจลน์จากการเบรกและการถอนคันเร่งกลับมาแปลงเป็นพลังงานไฟฟ้า ช่วยเพิ่มระยะทางขับขี่ (Range) ได้สูงสุดถึง 15-20% พร้อมรองรับระบบ One-Pedal Driving
+            </p>
+        </div>
+        
+    </div>
+</div>
 
             <!-- Panel 3: สถานะการจองคิวทดลองขับ -->
             <div id="testDrivePanel" class="w-full max-w-2xl pb-20 transition-opacity duration-500 hidden opacity-0 absolute top-12 px-4 md:px-0">

@@ -8,21 +8,37 @@
 </head>
 <body class="bg-white text-black font-sans antialiased selection:bg-black selection:text-white">
 
-    <!-- Navbar แบบมินิมอล -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
-        <div class="max-w-[1440px] mx-auto px-6 py-6 flex justify-between items-center">
-            <a href="{{ route('home') }}" class="flex items-center gap-2 text-gray-500 hover:text-black transition-colors text-sm font-medium tracking-wide uppercase group">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 transform transition-transform group-hover:-translate-x-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                </svg>
-                Back to Home
-            </a>
-            <span class="text-xl md:text-2xl font-bold tracking-[0.2em] uppercase absolute left-1/2 transform -translate-x-1/2">
-                SCI EV Hub
+    <!-- Navbar แบบ Responsive (มือถือ 2 บรรทัด / คอม 1 บรรทัด) -->
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between relative">
+
+        <!-- ฝั่งซ้าย: ปุ่มย้อนกลับ -->
+        <a href="/" class="flex items-center gap-2 md:gap-3 text-gray-500 hover:text-black transition-colors relative z-10">
+            <!-- ไอคอนลูกศร -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            <!-- ข้อความ: มือถือขึ้นบรรทัดใหม่ / คอมบรรทัดเดียว -->
+            <span class="text-[13px] font-bold leading-tight tracking-wide text-left">
+                กลับสู่หน้า<br class="block md:hidden">หลัก
             </span>
-            <div class="w-20"></div> <!-- Placeholder รักษาสมดุล -->
+        </a>
+
+        <!-- ตรงกลาง: โลโก้ -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 text-center pointer-events-auto w-max">
+            <a href="/" class="block">
+                <!-- ข้อความ: มือถือขึ้นบรรทัดใหม่ / คอมบรรทัดเดียวและเว้นวรรค -->
+                <h1 class="text-[17px] md:text-[20px] font-extrabold text-[#0f172a] tracking-[0.15em] leading-tight uppercase text-center">
+                    SCI EV<br class="block md:hidden"><span class="hidden md:inline"> </span>HUB
+                </h1>
+            </a>
         </div>
-    </nav>
+
+        <!-- ฝั่งขวา: กล่องเปล่าเพื่อดันให้โลโก้อยู่ตรงกลางสมบูรณ์ -->
+        <div class="w-16 md:w-24"></div>
+
+    </div>
+</nav>
 
     <main class="max-w-[1440px] mx-auto px-6 py-16 md:py-24">
         
@@ -122,19 +138,25 @@
 
         </div>
 
-        <!-- แผนที่ Google Maps -->
-        <div class="mt-24 rounded-3xl overflow-hidden border border-gray-200 shadow-sm h-[400px]">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m2!1s0x30e29b71bc297371%3A0x6b86d63428d052fc!2z4LiE4LiT4Liw4Lin4Li04LiX4Lii4Liy4Lio4Liy4Liq4LiV4Lij4LmN4Lil4Liw4LmA4LiX4LiE4LmC4LiZ4LmC4Lil4Lii4Li1!5e0!3m2!1sth!2sth!4v1700000000000!5m2!1sth!2sth" 
-                width="100%" 
-                height="100%" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-
+       <!-- แผนที่ Google Maps - แยกออกมาอยู่ด้านล่าง Grid และเพิ่ม margin-top ให้สมส่วน -->
+       <div class="mt-16 md:mt-24 w-full h-[400px] md:h-[500px] bg-gray-100 rounded-3xl overflow-hidden shadow-sm relative group">
+                
+           <!-- โค้ด iframe ที่ซ่อมแซมแล้ว -->
+           <iframe 
+               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3874.346193368016!2d100.50960337508586!3d13.818238695751905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29b9f54b53151%3A0x73d2b2a69752fd89!2z4Lio4Li54LiZ4Lii4LmM4Lie4Lij4Liw4LiZ4LiE4Lij4LmA4Lir4LiZ4Li34LitIOC4oeC4q-C4suC4p-C4tOC4l-C4ouC4suC4peC4seC4ouC5gOC4l-C4hOC5guC4meC5guC4peC4ouC4teC4o-C4suC4iuC4oeC4h-C4hOC4peC4nuC4o-C4sOC4meC4hOC4ow!5e0!3m2!1sth!2sth!4v1791389294076!5m2!1sth!2sth"
+               class="absolute inset-0 w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 ease-in-out"
+               style="border:0;" 
+               allowfullscreen="" 
+               loading="lazy" 
+               referrerpolicy="no-referrer-when-downgrade">
+           </iframe>
+                
+           <!-- ป้ายบอกพิกัดเล็กๆ -->
+           <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md px-5 py-3 rounded-2xl shadow-lg border border-gray-100 pointer-events-none transition-transform duration-500 group-hover:-translate-y-2 z-10">
+               <p class="text-[10px] font-extrabold tracking-widest uppercase text-gray-500 mb-1">HQ Office</p>
+               <p class="text-sm font-bold text-black">SCI EV Hub Center</p>
+           </div>
+       </div>
     </main>
 
     <!-- เรียกใช้ Footer ที่เราปรับปรุงไว้ (ถ้ามีไฟล์ partials/footer.blade.php) -->

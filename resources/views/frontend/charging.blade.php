@@ -11,25 +11,37 @@
 </head>
 <body class="bg-white text-gray-900 font-sans antialiased selection:bg-black selection:text-white overflow-x-hidden">
 
-    <!-- Navigation -->
-    <nav class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100 transition-all" data-aos="fade-down" data-aos-duration="800">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between relative">
-            <div class="flex-1 flex justify-start">
-                <a href="/" class="flex items-center gap-2 text-gray-500 hover:text-black transition duration-300 text-xs font-semibold tracking-widest uppercase">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-                    </svg>
-                    Back to Hub
-                </a>
-            </div>
+    <!-- Navbar แบบ Responsive (มือถือ 2 บรรทัด / คอม 1 บรรทัด) -->
+<nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between relative">
 
-            <span class="absolute left-1/2 transform -translate-x-1/2 text-xl font-black tracking-[0.25em] uppercase text-black">
-                SCI EV Hub
+        <!-- ฝั่งซ้าย: ปุ่มย้อนกลับ -->
+        <a href="/" class="flex items-center gap-2 md:gap-3 text-gray-500 hover:text-black transition-colors relative z-10">
+            <!-- ไอคอนลูกศร -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            <!-- ข้อความ: มือถือขึ้นบรรทัดใหม่ / คอมบรรทัดเดียว -->
+            <span class="text-[13px] font-bold leading-tight tracking-wide text-left">
+                กลับสู่หน้า<br class="block md:hidden">หลัก
             </span>
+        </a>
 
-            <div class="flex-1"></div>
+        <!-- ตรงกลาง: โลโก้ -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 text-center pointer-events-auto w-max">
+            <a href="/" class="block">
+                <!-- ข้อความ: มือถือขึ้นบรรทัดใหม่ / คอมบรรทัดเดียวและเว้นวรรค -->
+                <h1 class="text-[17px] md:text-[20px] font-extrabold text-[#0f172a] tracking-[0.15em] leading-tight uppercase text-center">
+                    SCI EV<br class="block md:hidden"><span class="hidden md:inline"> </span>HUB
+                </h1>
+            </a>
         </div>
-    </nav>
+
+        <!-- ฝั่งขวา: กล่องเปล่าเพื่อดันให้โลโก้อยู่ตรงกลางสมบูรณ์ -->
+        <div class="w-16 md:w-24"></div>
+
+    </div>
+</nav>
 
     <main>
         <!-- Hero Section แบบเต็มจอ (Full Screen) -->
