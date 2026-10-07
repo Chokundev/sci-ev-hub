@@ -30,24 +30,27 @@ class OrderController extends Controller
     // 1. ปรับปรุงฟังก์ชัน store ให้ Redirect ไปหน้า success พร้อมส่ง ID ของ Order ไปด้วย
     public function store(Request $request, Product $product)
     {
-        $request->validate([
-            'notes' => 'nullable|string|max:1000'
-        ]);
+        // 1. ตรวจสอบว่าผู้ใช้มีออเดอร์ของ "รถยนต์รุ่นนี้" ที่ยังค้างอยู่หรือไม่
+        $activeOrderExists = Order::where('user_id', Auth::id())
+            ->where('product_id', $product->id)
+            ->whereIn('status', ['pending', 'processing']) // เช็คเฉพาะสถานะที่ยังไม่เสร็จสิ้น
+            ->exists();
 
-        $orderNumber = 'ORD-' . strtoupper(substr(uniqid(), -6));
+        // 2. ถ้ามีออเดอร์ค้างอยู่ ให้ตีกลับพร้อมข้อความแจ้งเตือน
+        if ($activeOrderExists) {
+            return back()->with('error', 'คุณมีรายการสั่งซื้อรถยนต์รุ่นนี้ที่กำลังดำเนินการอยู่ ไม่สามารถสั่งซื้อซ้ำได้จนกว่ารายการเดิมจะเสร็จสิ้นหรือถูกยกเลิกครับ');
+        }
 
-        // สร้างและเก็บค่าตัวแปร $order ไว้
+        // 3. ถ้าไม่มีออเดอร์ค้าง ให้สร้างคำสั่งซื้อใหม่ได้ตามปกติ
         $order = Order::create([
             'user_id' => Auth::id(),
             'product_id' => $product->id,
-            'order_number' => $orderNumber,
+            'order_number' => 'ORD-' . strtoupper(uniqid()),
             'total_price' => $product->price,
             'status' => 'pending',
-            'notes' => $request->notes,
         ]);
 
-        // เปลี่ยนเป้าหมายการ Redirect จาก dashboard เป็นหน้า order.success
-        return redirect()->route('order.success', $order->id)->with('success', 'สั่งจองรถยนต์สำเร็จ!');
+        return redirect()->route('order.success', $order->id)->with('success', 'สั่งซื้อรถยนต์สำเร็จ!');
     }
 
     // 2. เพิ่มฟังก์ชันสำหรับแสดงหน้าสรุปคำสั่งจอง

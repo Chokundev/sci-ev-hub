@@ -22,24 +22,35 @@ class TestDriveController extends Controller
 
     public function store(Request $request)
     {
-        // 1. ตรวจสอบข้อมูลที่ส่งมาจากฟอร์ม
+        // ตรวจสอบความถูกต้องของฟอร์ม
         $request->validate([
-            'product_id' => 'required',
+            'product_id' => 'required|exists:products,id',
             'booking_date' => 'required|date|after_or_equal:today',
             'booking_time' => 'required',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
-        // 2. บันทึกลงฐานข้อมูล
-        \App\Models\TestDrive::create([
-            'user_id' => \Illuminate\Support\Facades\Auth::id(),
+        // 1. ตรวจสอบว่าผู้ใช้มีคิวทดลองขับ "รถยนต์รุ่นนี้" ที่ยังไม่เสร็จสิ้นหรือไม่
+        $activeTestDriveExists = TestDrive::where('user_id', Auth::id())
+            ->where('product_id', $request->product_id)
+            ->whereIn('status', ['pending', 'confirmed']) // เช็คสถานะรอดำเนินการ หรือ ยืนยันคิวแล้ว
+            ->exists();
+
+        // 2. ถ้ามีคิวค้างอยู่ ให้ตีกลับพร้อมข้อความแจ้งเตือน
+        if ($activeTestDriveExists) {
+            return back()->with('error', 'คุณมีคิวทดลองขับสำหรับรถยนต์รุ่นนี้ที่กำลังดำเนินการอยู่ ไม่สามารถจองซ้ำได้ครับ');
+        }
+
+        // 3. ถ้าไม่มีคิวค้าง ให้สร้างการจองใหม่
+        TestDrive::create([
+            'user_id' => Auth::id(),
             'product_id' => $request->product_id,
             'booking_date' => $request->booking_date,
             'booking_time' => $request->booking_time,
             'notes' => $request->notes,
-            'status' => 'Pending', // ใส่สถานะเริ่มต้น
+            'status' => 'pending',
         ]);
 
-        // 3. เปลี่ยนจากที่เคยเด้งไป dashboard ให้เด้งกลับไปหน้าแรก (/) แทน
-        return redirect('/')->with('success', 'จองคิวทดลองขับเรียบร้อยแล้ว!');
+        return redirect()->route('dashboard')->with('success', 'ระบบได้รับคำขอจองคิวทดลองขับของคุณแล้ว โปรดรอการยืนยันจากเจ้าหน้าที่');
     }
 }

@@ -203,5 +203,41 @@
         }
     </style>
     @endif
+    @if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ป๊อปอัปแจ้งเตือนข้อผิดพลาด (Premium Dark Style)
+            Swal.fire({
+                html: `
+                    <div style="display: flex; align-items: center; text-align: left; width: 100%;">
+                        <div style="background-color: #ef4444; color: #ffffff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 14px; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px;"><path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" /></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 14px; font-weight: 600; color: #ffffff; margin-bottom: 2px; letter-spacing: 0.3px;">ไม่สามารถจองคิวซ้ำได้</div>
+                            <div style="font-size: 12px; color: #a3a3a3; font-weight: 400; line-height: 1.4;">{{ session('error') }}</div>
+                        </div>
+                    </div>
+                `,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true, // เปิดบาร์โหลดเพื่อระบุว่าเดี๋ยวจะหายไป
+                background: '#1a1a1a',
+                color: '#ffffff',
+                padding: '16px 20px',
+                width: 'auto',
+                customClass: {
+                    popup: 'custom-premium-popup'
+                },
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+        });
+    </script>
+    @endif
 </body>
 </html>
