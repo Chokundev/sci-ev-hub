@@ -21,27 +21,32 @@ class ProfileController extends Controller
 
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = $request->user();
-        $user->fill($request->validated());
+        $request->user()->fill($request->validated());
 
-        if ($user->isDirty('email')) {
-            $user->email_verified_at = null;
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
 
-        // จัดการอัปโหลดรูปโปรไฟล์
+        // ==========================================
+        // อัปเดตการชี้ Path ไปที่โฟลเดอร์ public โดยตรง
+        // ==========================================
         if ($request->hasFile('avatar')) {
-            // ถ้ามีรูปเก่าอยู่ ให้ลบทิ้งก่อนเพื่อประหยัดพื้นที่
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
-            }
-            // อัปโหลดรูปใหม่และเก็บ Path
-            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+            $file = $request->file('avatar');
+            
+            $filename = 'avatar_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+            
+            // ใช้ public_path() เพื่อชี้เป้าหมายไปที่โฟลเดอร์จริงหน้าบ้านที่เราเพิ่งสร้าง
+            $destinationPath = public_path('storage/avatars');
+            
+            $file->move($destinationPath, $filename);
+            
+            // ชื่อที่บันทึกลงฐานข้อมูลยังคงเหมือนเดิม เพื่อให้ดึงไปใช้งานด้วย asset('storage/...') ได้ตามปกติ
+            $request->user()->avatar = 'avatars/' . $filename;
         }
 
-        $user->save();
+        $request->user()->save();
 
-        // ส่งกลับพร้อม session แจ้งเตือนว่าสำเร็จ
-        return Redirect::route('profile.edit')->with('success', 'อัปเดตข้อมูลโปรไฟล์เรียบร้อยแล้ว!');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     public function destroy(Request $request): RedirectResponse
